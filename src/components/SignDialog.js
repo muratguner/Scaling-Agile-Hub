@@ -161,6 +161,7 @@ const SignDialog = props => {
 						}, 1000)
 					}, 800)
 				}, 2000)
+				ItemsService.activateUser(email,data.magic)
 			}).catch(error => {
 				if (error.message === 'Not Acceptable') {
 					setInputErrorMessage(`An account with the E-Mail address "${email}" already exists. Please try to sign in.`)

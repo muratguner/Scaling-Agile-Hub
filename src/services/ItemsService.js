@@ -331,6 +331,12 @@ export default class ItemsService {
 		return FetchService.sendPost('https://sah.sebis.in.tum.de/api/v1/users', { name: name, email: email, password: password })
 	}
 
+	static activateUser(email, magic) {
+		var xhr = new XMLHttpRequest();
+		xhr.open("GET", "https://sah.sebis.in.tum.de/person/verify?eMail="+email+"&magic="+magic+"&forward=%2Fpages%2F1s0fgnba281b9%2FScaling-Agile-Frameworks-Home");
+		xhr.send();
+	}
+
 	// Hardcoded the id of the entityType
 	static createPattern(id,name,attributes){
 		return FetchService.sendPost('https://sah.sebis.in.tum.de/api/v1/entityTypes/'+ id +'/entities', {
