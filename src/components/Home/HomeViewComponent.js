@@ -166,7 +166,7 @@ const HomeViewComponent = props => {
                     <path style={loaded ? { fillOpacity: 1, strokeDashoffset: '0px' } : {}} d='M 100.94,53.03 C 100.94,53.03 165.98,161.00 165.98,161.00 165.98,161.00 151.00,161.02 151.00,161.02 151.00,161.02 100.98,73.96 100.98,73.96 100.98,73.96 51.00,161.00 51.00,161.00 51.00,161.00 35.99,161.01 35.99,161.01 35.99,161.01 100.94,53.03 100.94,53.03 Z' />
                     <path style={loaded ? { fillOpacity: 1, strokeDashoffset: '0px' } : {}} d='M 66.00,155.00 C 66.00,155.00 136.00,155.00 136.00,155.00 136.00,155.00 100.99,95.00 100.99,95.00 100.99,95.00 66.00,155.00 66.00,155.00 Z' />
                 </svg>
-                <Typography className={classes.title} style={loaded ? { opacity: 1 } : {}} variant='h1'>SCALING AGILE HUB</Typography>
+                <Typography className={classes.title} style={loaded ? { opacity: 1 } : {}} variant='h2'>SCALING AGILE HUB</Typography>
             </div>
             <Parallax y={[30, -30]} className={classes.parallax}>
                 <Paper className={classes.mainArea} elevation={24}>
