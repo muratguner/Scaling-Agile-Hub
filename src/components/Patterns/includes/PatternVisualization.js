@@ -19,7 +19,7 @@ const PatternVisualization = props => {
 					
 					<g key={index}>
 						<filter id='entity-shadow' height='130%'>
-							<feDropShadow id='entity-shadow' dx='5' dy='5' stdDeviation='4' floodColor='darkgray' floodOpacity='0.4' />
+							<feDropShadow id='entity-shadow' dx='5' dy='5' stdDeviation='4' floodColor='darkgray' floodOpacity='0.4'/>
 						</filter>
 						<rect x={entity.startX + (padding || 0) / 2} y={entity.startY + (padding || 0) / 2} width={entity.width - (padding || 0)} height={entity.height - (padding || 0)} fill='#f0f0f0' rx={5} ry={5} filter='url(#entity-shadow)' />
 						<text x={entity.startX + (padding || 0) / 2} y={entity.startY + (padding || 0) / 3} fontFamily='Raleway' fontSize={nodeRadius * 1.2}>{entity.entityName}</text>
@@ -152,6 +152,29 @@ const PatternVisualization = props => {
 				{
 					let is = item.identifier.length
 					let rs = item.name.length
+					let sr;
+					if (rs <= 9) {
+						sr = 9 + (rs/4)
+					}
+					else if (rs <= 12) {
+						sr = 12 + (rs/4)
+					} 
+					else if (rs == 15) {
+						sr = 18 + (rs/4)
+					} 
+					else if ( rs == 16) {
+						sr = 11 + (rs/2)
+					} 
+					else if ( rs <= 17) {
+						sr = 12 + (rs/2)
+					} 
+					else if ( rs <= 18) {
+						sr = 9 + (rs/2)
+					}
+					else if ( rs > 18) {
+						sr = 14 + (rs/2)
+					}
+
 					let cs = rs
 					if(rs < 13 && rs > 11)
 					{rs = rs + (rs / (2 * rs))
@@ -194,7 +217,7 @@ const PatternVisualization = props => {
 						/>
 						
 						<circle
-						cx={item.startX - (cs * 6)}
+						cx={item.startX - (cs * 6 )}
 						cy={item.startY}
 						r={nodeRadius + 1.5}
 						fill={highlighted ? GET_ENTITY_COLOR(entity.entityName) : fade(GET_ENTITY_COLOR(entity.entityName), 0.2)}
@@ -204,8 +227,8 @@ const PatternVisualization = props => {
 					
 					
 
-					<text x={item.startX - 2} y={item.startY + 4} textAnchor='middle' alignmentBaseline='central' fontFamily='Raleway' fontSize={nodeRadius * 0.85} fill="black" word-spacing="2">
-					<tspan>{item.identifier}</tspan><tspan>&nbsp;&nbsp;</tspan><tspan>{item.name}</tspan></text>
+					<text x={item.startX - sr} y={item.startY + 4} textAnchor='middle' alignmentBaseline='central' fontFamily='Raleway' fontSize={nodeRadius * 0.85} fill="black" word-spacing="2">
+					<tspan>{item.identifier}</tspan><tspan>&nbsp;&nbsp;&nbsp;&nbsp;</tspan><tspan>{item.name}</tspan></text>
 					</g>
 				
 					)
@@ -263,7 +286,7 @@ const PatternVisualization = props => {
 						<filter id='tooltip-shadow' height='130%'>
 							<feDropShadow id='tooltip-shadow' dx='3' dy='3' stdDeviation='2' floodColor='darkgray' floodOpacity='0.4' />
 						</filter>
-						<path fill='#fafafa' transform={`translate(${item.startX - (mirrorHorizontally ? -18 : 12)}, ${item.startY - (mirrorVertically ? -170 : 170)}) scale(11, 7) scale(${mirrorHorizontally ? -1 : 1}, ${mirrorVertically ? -1 : 1})`} d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
+						<path fill='#fafafa'  transform={`translate(${item.startX - (mirrorHorizontally ? -18 : 12)}, ${item.startY - (mirrorVertically ? -170 : 170)}) scale(11, 7) scale(${mirrorHorizontally ? -1 : 1}, ${mirrorVertically ? -1 : 1})`} d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z" />
 						<text fontFamily='Raleway' fontSize={nodeRadius * 0.7} textAnchor='middle'>
 							{textLines.map((line, index) => {
 								return (
