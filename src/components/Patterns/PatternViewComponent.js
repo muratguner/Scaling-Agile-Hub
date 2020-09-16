@@ -46,7 +46,18 @@ const useStyles = makeStyles(theme => ({
 		textAlign: 'center'
 	},
 	chip: {
-		marginTop: theme.spacing(2)
+		paddingLeft: theme.spacing(0.25),
+		paddingRight:theme.spacing(0.25),
+		paddingTop: theme.spacing(0.25),
+		paddingBottom:theme.spacing(0.25),
+		height: "40px",
+		marginRight: theme.spacing(1)
+	},
+	avatar: {
+		paddingLeft: theme.spacing(0.5),
+		paddingRight:theme.spacing(0.5),
+		paddingTop: theme.spacing(0.5),
+		paddingBottom:theme.spacing(0.5),
 	},
 	patternAvatar: {
 		color: 'white',
@@ -64,12 +75,14 @@ const useStyles = makeStyles(theme => ({
 		right: theme.spacing(5)
 	},
 	stakeholderChips: {
-		margin: theme.spacing(3)
+		margin: theme.spacing(3),
+		height: "40px"
 	},
 	chipsView: {
 		marginLeft: theme.spacing(2.5),
 		marginRight: theme.spacing(2.5),
 		marginBottom: theme.spacing(1),
+		marginTop: theme.spacing(1)
 	},
 	selectedStakeholders: {
 		display: 'flex',
@@ -477,7 +490,7 @@ const PatternViewComponent = props => {
 
 	const renderStakeholderChips = () => {
 		return stakeholderInfo.map((item, index) => {
-			return ( <Chip color={stakeholderVisibility[index] === true? "primary": "default"}className={classes.stakeholderChips} avatar={<Avatar>{item.identifier}</Avatar>} label={item.name} onClick={() => handleSelectStakeholder(item, index)} />);
+			return ( <Chip color={stakeholderVisibility[index] === true? "primary": "default"}className={classes.stakeholderChips} avatar={<Avatar className={classes.avatar}>{item.identifier}</Avatar>} label={item.name} onClick={() => handleSelectStakeholder(item, index)} />);
 		});
 	}
 	
@@ -485,7 +498,7 @@ const PatternViewComponent = props => {
 		if(multipleStakeholdersBeingRendered) {
 			return selectedStakeholders.map(val => {
 				if(val !== null) {
-					return <Chip className={classes.chip} avatar={<Avatar>{val.identifier}</Avatar>} label={val.name} onDelete={() => removeSelectedStakeholder(val.identifier)}/>
+					return <Chip className={classes.chip} avatar={<Avatar className={classes.avatar}>{val.identifier}</Avatar>} label={val.name} onDelete={() => removeSelectedStakeholder(val.identifier)}/>
 				}
 			})
 		}
@@ -589,7 +602,7 @@ const PatternViewComponent = props => {
 						
 					</div>
 					<div className={classes.chipsView}>
-						{selected && !multipleStakeholdersBeingRendered && <Chip className={classes.chip} avatar={<Avatar>{selected.identifier}</Avatar>} label={selected.name} onDelete={resetToInitialPageState}/>}
+						{selected && !multipleStakeholdersBeingRendered && <Chip className={classes.chip} avatar={<Avatar className={classes.avatar}>{selected.identifier}</Avatar>} label={selected.name} onDelete={resetToInitialPageState}/>}
 					</div>
 					<div className={classes.chipsView}>
 					{
