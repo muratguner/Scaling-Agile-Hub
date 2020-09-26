@@ -1,14 +1,36 @@
 import React from 'react'
 
-import { fade, useTheme } from '@material-ui/core/styles'
+import { fade } from '@material-ui/core/styles'
+
+import makeStyles from '@material-ui/core/styles/makeStyles'
+
+import Avatar from '@material-ui/core/Avatar'
 
 import { GET_ENTITY_COLOR } from '../../../config'
 
+import {Chip} from '@material-ui/core';
+
+
+const useStyles = makeStyles(theme => ({
+	avatar: {
+		paddingLeft: theme.spacing(0.5),
+		paddingRight:theme.spacing(0.5),
+		paddingTop: theme.spacing(0.5),
+		paddingBottom:theme.spacing(0.5),
+	},
+	stakeholderChips: {
+		marginLeft: theme.spacing(1),
+		marginRight: theme.spacing(1),
+		marginBottom: theme.spacing(1),
+		marginTop: theme.spacing(1),
+		height: "50px"
+	}
+}))
 
 
 const PatternVisualization = props => {
 	const { displayDynamic, positionData, linkData, height, width, nodeRadius, hovered, searched, onPath, selectedItem, handleNodeEnter, handleNodeLeave, handleNodeClick } = props
-
+	const classes = useStyles()
 	return (
 		<svg viewBox={`0 -30 ${width} ${height + 70}`}>
 			{displayDynamic && positionData.map(level => level.entities.map((entity, index) => {
@@ -196,42 +218,33 @@ const PatternVisualization = props => {
 					
 				
 					return (
-						
-						<g
-						key={index}
-						onMouseEnter={() => handleNodeEnter && handleNodeEnter(item.identifier)}
-						onMouseLeave={handleNodeLeave && handleNodeLeave}
-						onClick={() => handleNodeClick(item, entity.entityName)}
-						style={{ cursor: 'pointer' }}
-					>
-                  <rect
-							x={item.startX - rs * 8.5}
-							y={item.startY - 30 }
-							rx="30"
-							ry="30"
-							width={(rs * 17)}
-							height="60"
-							fill={"#e0e0e0"}
-							strokeWidth={selectedItem === item.identifier ? 12 : 4}
-						
-						/>
-						
-						<circle
-						cx={item.startX - (cs * 6 )}
-						cy={item.startY}
-						r={nodeRadius + 1.5}
-						fill={highlighted ? GET_ENTITY_COLOR(entity.entityName) : fade(GET_ENTITY_COLOR(entity.entityName), 0.2)}
-						strokeWidth={selectedItem === item.identifier ? 7 : 4}
-					/>
-					
-					
-					
-
-					<text x={item.startX - sr} y={item.startY + 4} textAnchor='middle' alignmentBaseline='central' fontFamily='Raleway' fontSize={nodeRadius * 0.85} fill="black" word-spacing="2">
-					<tspan>{item.identifier}</tspan><tspan>&nbsp;&nbsp;&nbsp;&nbsp;</tspan><tspan>{item.name}</tspan></text>
-					</g>
-				
-					)
+            <g
+              key={index}
+              onMouseEnter={() =>
+                handleNodeEnter && handleNodeEnter(item.identifier)
+              }
+              onMouseLeave={handleNodeLeave && handleNodeLeave}
+              onClick={() => handleNodeClick(item, entity.entityName)}
+              style={{ cursor: "pointer" }}
+            >
+              <foreignObject
+                width={rs * 17}
+                height="80"
+                x={item.startX - rs * 6.5}
+                y={item.startY - 30}
+              >
+                <Chip
+                  className={classes.stakeholderChips}
+                  avatar={
+                    <Avatar className={classes.avatar}>
+                      {item.identifier}
+                    </Avatar>
+                  }
+                  label={item.name}
+                />
+              </foreignObject>
+            </g>
+          );
 
 
 				}	
