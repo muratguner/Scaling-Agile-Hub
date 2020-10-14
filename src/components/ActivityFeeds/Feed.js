@@ -11,7 +11,6 @@ import IconButton from "@material-ui/core/IconButton";
 import ClearIcon from "@material-ui/icons/Clear";
 import Box from "@material-ui/core/Box";
 import Chip from "@material-ui/core/Chip";
-import CommentIcon from "@material-ui/icons/Comment";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,6 +20,7 @@ const useStyles = makeStyles((theme) => ({
     justify: "center",
     alignContent: "center",
     width: 300,
+    marginLeft: 16,
   },
   card: {
     width: 300,
@@ -54,19 +54,98 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Feed() {
-  const [commentsData, setComments] = useState([]);
+  const [comments, setComments] = useState([]);
   const classes = useStyles();
+  const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    async function fetchData() {
-      const commentsData = ItemsService.getComments();
-      commentsData.promise.then((data) => {
-        setComments(data.value);
-      });
-      return commentsData;
+  const getImage = async function getImage(id) {
+    return new Promise((resolve, reject) => {
+      const picData = ItemsService.getPictures(id);
+      picData
+        .then((data) => {
+          readFile(data).then((data) => {
+            setTimeout(function () {
+              resolve({ userid: id, image: data });
+            }, 100);
+          });
+        })
+        .catch((error) => {
+          console.log("Error");
+        });
+    });
+  };
+
+  const readFile = function read_file(data) {
+    return new Promise((resolve, reject) => {
+      let base64data;
+      const fileReaderInstance = new FileReader();
+      fileReaderInstance.readAsDataURL(data);
+      fileReaderInstance.onload = resolve;
+      fileReaderInstance.onload = () => {
+        base64data = fileReaderInstance.result;
+        setTimeout(function () {
+          resolve(base64data);
+        }, 100);
+      };
+    });
+  };
+
+  React.useEffect(() => {
+    async function loadDataAsync() {
+      try {
+        await fetchData();
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        setTimeout(() => {
+          setLoading(true);
+        }, 100);
+      }
     }
-    fetchData();
-  }, [commentsData]);
+    loadDataAsync();
+  }, [loading]);
+
+  const setImage = async function setImage(array, id) {
+    setComments(
+      (commentsGlobal = commentsGlobal.map((item) =>
+        item.profilePicture === " " && item.userid === id
+          ? {
+              ...item,
+              profilePicture:
+                array[array.findIndex((obj) => obj.userid == item.userid)]
+                  .image,
+            }
+          : item
+      ))
+    );
+  };
+
+  let commentsGlobal = [];
+  const fetchData = async function fetchData() {
+    const commentsData = ItemsService.getComments();
+    const clapCountFromBackend = ItemsService.getClapCount();
+
+    commentsData.promise.then((data) => {
+      let commentsArray = data.value;
+
+      commentsGlobal = commentsArray.map((comment) => ({
+        ...comment,
+        profilePicture: " ",
+      }));
+
+      let bufferArray = [];
+      commentsGlobal.forEach((element) => {
+        getImage(element.userid).then((data) => {
+          bufferArray.push(data);
+          setImage(bufferArray, element.userid);
+        });
+      });
+    });
+
+    clapCountFromBackend.promise.then((data) => {
+      //console.log(data.value);
+    });
+  };
 
   return (
     <div
@@ -77,50 +156,54 @@ function Feed() {
         paddingBottom: "50px",
       }}
     >
-      <Box display="flex" p={1} bgcolor="background.paper">
-        {commentsData.map((value) => (
-          <Card className={classes.root} key={value.id}>
-            <CardHeader
-              avatar={
-                <Avatar aria-label="recipe" className={classes.avatar}>
-                  {value.username.charAt(0)}
-                </Avatar>
-              }
-              action={
-                <IconButton aria-label="Clear">
-                  <ClearIcon />
-                </IconButton>
-              }
-              title={value.username + " has commented on:"}
-            />
-            <CardContent>
-              <Chip
-                className={classes.chip}
+      {loading && (
+        <Box display="flex" p={1} bgcolor="background.paper">
+          {comments.map((value, i) => (
+            <Card className={classes.root} key={value.id}>
+              <CardHeader
                 avatar={
                   <Avatar
-                    style={{
-                      color: "white",
-                      height: "40px",
-                      width: "40px",
-                      backgroundColor:
-                        (value.pattern.charAt(0) === "C" && "#f29b30") ||
-                        (value.pattern.charAt(0) === "A" && "#e74c3c") ||
-                        (value.pattern.charAt(0) === "M" && "#3498db") ||
-                        (value.pattern.charAt(0) === "P" && "#34495e") ||
-                        (value.pattern.charAt(0) === "V" && "#4eba6f") ||
-                        (value.pattern.charAt(2) === "o" && "#e74c3c"),
-                    }}
-                  >
-                    {value.pattern}
-                  </Avatar>
+                    aria-label="recipe"
+                    className={classes.avatar}
+                    src={value.profilePicture}
+                  ></Avatar>
                 }
-                label={value.patternName.substring(0, 30)}
+                action={
+                  <IconButton aria-label="Clear">
+                    <ClearIcon />
+                  </IconButton>
+                }
+                title={value.username + " has commented on:"}
               />
-            </CardContent>
-            <CardActions disableSpacing></CardActions>
-          </Card>
-        ))}
-      </Box>
+              <CardContent>
+                <Chip
+                  className={classes.chip}
+                  avatar={
+                    <Avatar
+                      style={{
+                        color: "white",
+                        height: "40px",
+                        width: "40px",
+                        backgroundColor:
+                          (value.pattern.charAt(0) === "C" && "#f29b30") ||
+                          (value.pattern.charAt(0) === "A" && "#e74c3c") ||
+                          (value.pattern.charAt(0) === "M" && "#3498db") ||
+                          (value.pattern.charAt(0) === "P" && "#34495e") ||
+                          (value.pattern.charAt(0) === "V" && "#4eba6f") ||
+                          (value.pattern.charAt(2) === "o" && "#e74c3c"),
+                      }}
+                    >
+                      {value.pattern}
+                    </Avatar>
+                  }
+                  label={value.patternName.substring(0, 30)}
+                />
+              </CardContent>
+              <CardActions disableSpacing></CardActions>
+            </Card>
+          ))}
+        </Box>
+      )}
     </div>
   );
 }
