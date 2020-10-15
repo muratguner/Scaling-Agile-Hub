@@ -53,7 +53,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Feed() {
+function Feed(props) {
   const [comments, setComments] = useState([]);
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
@@ -88,6 +88,14 @@ function Feed() {
         }, 100);
       };
     });
+  };
+
+  const removeItem = async function removeItem(index) {
+    setTimeout(() => {
+      commentsGlobal = comments;
+      commentsGlobal.splice(index, 1);
+      setComments([...commentsGlobal]);
+    }, 100);
   };
 
   React.useEffect(() => {
@@ -169,7 +177,12 @@ function Feed() {
                   ></Avatar>
                 }
                 action={
-                  <IconButton aria-label="Clear">
+                  <IconButton
+                    aria-label="Clear"
+                    onClick={() => {
+                      removeItem(i);
+                    }}
+                  >
                     <ClearIcon />
                   </IconButton>
                 }
@@ -177,6 +190,9 @@ function Feed() {
               />
               <CardContent>
                 <Chip
+                  onClick={() => {
+                    showPattern();
+                  }}
                   className={classes.chip}
                   avatar={
                     <Avatar
