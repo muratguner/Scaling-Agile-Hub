@@ -11,6 +11,7 @@ import IconButton from "@material-ui/core/IconButton";
 import ClearIcon from "@material-ui/icons/Clear";
 import Box from "@material-ui/core/Box";
 import Chip from "@material-ui/core/Chip";
+import { useHistory } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -57,6 +58,7 @@ function Feed(props) {
   const [comments, setComments] = useState([]);
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
 
   const getImage = async function getImage(id) {
     return new Promise((resolve, reject) => {
@@ -96,6 +98,18 @@ function Feed(props) {
       commentsGlobal.splice(index, 1);
       setComments([...commentsGlobal]);
     }, 100);
+  };
+
+  const showPattern = async function showPattern(pattern) {
+    let patternType =
+      (pattern.charAt(0) === "C" && "Concerns") ||
+      (pattern.charAt(0) === "A" && "Anti Patterns") ||
+      (pattern.charAt(0) === "M" && "Methodology Pattern") ||
+      (pattern.charAt(0) === "P" && "Principles") ||
+      (pattern.charAt(0) === "V" && "Visualization Pattern") ||
+      (pattern.charAt(2) === "o" && "Coordination Patterns");
+
+    history.push(`/patterns/${patternType}/${pattern}`);
   };
 
   React.useEffect(() => {
@@ -191,7 +205,7 @@ function Feed(props) {
               <CardContent>
                 <Chip
                   onClick={() => {
-                    showPattern();
+                    showPattern(value.pattern);
                   }}
                   className={classes.chip}
                   avatar={
