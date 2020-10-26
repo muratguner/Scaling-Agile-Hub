@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   parallax: {
     marginTop: "-400px",
     [theme.breakpoints.up("md")]: {
-      marginTop: "-320px",
+      marginTop: "-310px",
     },
   },
   cardsContainer: {
