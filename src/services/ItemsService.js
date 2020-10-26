@@ -6,6 +6,8 @@ import {
   PATTERNS_MXL_URL,
   RATINGS_ENTITY_URL,
   RATINGS_MXL_URL,
+  FEEDBACK_ENTITY_URL,
+  FEEDBACK_MXL_URL,
 } from "../constants";
 
 export default class ItemsService {
@@ -175,6 +177,23 @@ export default class ItemsService {
       "userid: userid," +
       "username: username," +
       "value: value" +
+      "})"
+    );
+  }
+
+  static getFeedbackQuery() {
+    return (
+      "find('Feedback').select({" +
+      "id: id," +
+      "name: Name," +
+      "comment: comment," +
+      "isSubCommentOf: isSubCommentOf," +
+      "pattern: pattern," +
+      "patternName: patternName," +
+      "star: star," +
+      "timestamp: timestamp," +
+      "userid: userid," +
+      "username: username" +
       "})"
     );
   }
@@ -486,6 +505,52 @@ export default class ItemsService {
     );
   }
 
+  static addFeedback(pattern, patternName, isSubCommentOfTemp, value, comment) {
+    return FetchService.sendPost(
+      FEEDBACK_ENTITY_URL,
+      {
+        name: `${this.getUUID()}`,
+        attributes: [
+          {
+            name: "comment",
+            values: [comment],
+          },
+          {
+            name: "isSubCommentOf",
+            values: [isSubCommentOfTemp],
+          },
+          {
+            name: "pattern",
+            values: [pattern],
+          },
+          {
+            name: "patternName",
+            values: [patternName],
+          },
+          {
+            name: "star",
+            values: [value],
+          },
+
+          {
+            name: "timestamp",
+            values: [Date.now()],
+          },
+
+          {
+            name: "userid",
+            values: [this.getUserId()],
+          },
+          {
+            name: "username",
+            values: [this.getUserName()],
+          },
+        ],
+      },
+      { authorization: this.getBearerToken() }
+    );
+  }
+
   static upvoteComment(
     id,
     name,
@@ -552,6 +617,14 @@ export default class ItemsService {
     return {
       promise: FetchService.sendPost(COMMENTS_MXL_URL, {
         expression: this.getCommentsQuery(),
+      }),
+    };
+  }
+
+  static getFeedback() {
+    return {
+      promise: FetchService.sendPost(FEEDBACK_MXL_URL, {
+        expression: this.getFeedbackQuery(),
       }),
     };
   }

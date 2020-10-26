@@ -144,10 +144,10 @@ function Feed(props) {
 
   let commentsGlobal = [];
   const fetchData = async function fetchData() {
-    const commentsData = ItemsService.getComments();
+    const feedbackData = ItemsService.getFeedback();
     const clapCountFromBackend = ItemsService.getClapCount();
 
-    commentsData.promise.then((data) => {
+    feedbackData.promise.then((data) => {
       let commentsArray = data.value;
 
       commentsGlobal = commentsArray.map((comment) => ({
@@ -200,7 +200,7 @@ function Feed(props) {
                     <ClearIcon />
                   </IconButton>
                 }
-                title={value.username + " has commented on:"}
+                title={value.username + " has Feedback on:"}
               />
               <CardContent>
                 <Chip
