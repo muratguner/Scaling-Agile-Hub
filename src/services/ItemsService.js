@@ -613,6 +613,13 @@ export default class ItemsService {
     );
   }
 
+  static deleteFeedback(id) {
+    return FetchService.sendDelete(
+      "https://sah.sebis.in.tum.de/api/v1/entities/" + id,
+      { authorization: this.getBearerToken() }
+    );
+  }
+
   static getComments() {
     return {
       promise: FetchService.sendPost(COMMENTS_MXL_URL, {

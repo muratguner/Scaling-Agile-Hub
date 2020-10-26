@@ -3,6 +3,7 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import { Button, Divider, Paper, Typography } from "@material-ui/core";
 import ItemsService from "../../../../services/ItemsService";
 import RichTextEditor from "react-rte";
+import StarRatingComponent from "react-star-rating-component";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -39,9 +40,14 @@ const CreateComment = (props) => {
   const [commentEditorState, setCommentEditorState] = React.useState(
     RichTextEditor.createValueFromString("", "html")
   );
+  const [rating, setRatingState] = React.useState();
 
   const updateComment = (e) => {
     setCommentEditorState(e);
+  };
+
+  const setRating = (e) => {
+    setRatingState(e);
   };
 
   const sendComment = () => {
@@ -53,7 +59,7 @@ const CreateComment = (props) => {
       pattern,
       patternName,
       isSubCommentOfTemp,
-      "5",
+      rating,
       commentEditorState.toString("html")
     );
     returned.then((data) => {
@@ -74,6 +80,16 @@ const CreateComment = (props) => {
   return (
     <div className={classes.createCommentRoot}>
       <div className={classes.editorBounds}>
+        <div>
+          <h2>Rating</h2>
+          <StarRatingComponent
+            name="rate1"
+            starCount={5}
+            value={rating}
+            onStarClick={setRating}
+          />
+        </div>
+        <h2>Comment</h2>
         <RichTextEditor
           value={commentEditorState}
           onChange={updateComment}

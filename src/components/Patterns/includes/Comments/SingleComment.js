@@ -19,6 +19,7 @@ import ItemsService from "../../../../services/ItemsService";
 import ReactHtmlParser from "react-html-parser";
 import DeleteIcon from "@material-ui/icons/Delete";
 import CreateComment from "./CreateComment";
+import StarRatingComponent from "react-star-rating-component";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -58,6 +59,9 @@ const useStyles = makeStyles((theme) => {
       justifyContent: "space-between",
       margin: theme.spacing(1),
     },
+    rating: {
+      paddingLeft: "15px",
+    },
   };
 });
 
@@ -84,7 +88,7 @@ const SingleComment = (props) => {
     });
   };
   const deleteComment = () => {
-    var returned = ItemsService.deleteComment(comment.id);
+    var returned = ItemsService.deleteFeedback(comment.id);
     returned.then((data) => {
       window.location.reload();
     });
@@ -125,6 +129,14 @@ const SingleComment = (props) => {
             </Typography>
           }
         />
+        <div className={classes.rating}>
+          <StarRatingComponent
+            name="rating"
+            starCount={5}
+            value={comment.star}
+          />
+        </div>
+
         <CardContent>
           {comment.isSubCommentOf === undefined ||
           comment.isSubCommentOf === null ? null : (

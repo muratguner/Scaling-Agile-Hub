@@ -66,6 +66,7 @@
     "react-router-dom": "^5.0.1",
     "react-rte": "^0.16.1",
     "react-scroll-parallax": "^2.1.2",
+    "react-star-rating-component": "^1.4.1",
     "react-swipeable-views": "^0.13.3",
     "regenerator-runtime": "^0.13.2"
   },

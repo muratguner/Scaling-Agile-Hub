@@ -12,6 +12,7 @@ import ClearIcon from "@material-ui/icons/Clear";
 import Box from "@material-ui/core/Box";
 import Chip from "@material-ui/core/Chip";
 import { useHistory } from "react-router-dom";
+import StarRatingComponent from "react-star-rating-component";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -202,6 +203,13 @@ function Feed(props) {
                 }
                 title={value.username + " has Feedback on:"}
               />
+              <div>
+                <StarRatingComponent
+                  name="rating"
+                  starCount={5}
+                  value={value.star}
+                />
+              </div>
               <CardContent>
                 <Chip
                   onClick={() => {
