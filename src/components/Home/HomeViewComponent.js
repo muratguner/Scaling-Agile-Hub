@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme) => ({
     borderRadius: "10px",
     [theme.breakpoints.up("md")]: {
       borderRadius: "20px",
-      padding: theme.spacing(8, 9, 0, 9),
+      padding: theme.spacing(4, 9, 0, 9),
       margin: theme.spacing(0, 10, 4, 10),
     },
   },
@@ -220,6 +220,20 @@ const HomeViewComponent = (props) => {
       </div>
       <Parallax y={[30, -30]} className={classes.parallax}>
         <Paper className={classes.feedArea} elevation={24}>
+          <Grid
+            item
+            container
+            spacing={2}
+            direction="column"
+            justify="center"
+            alignItems="center"
+          >
+            <Grid item>
+              <Typography variant="h4" color="primary">
+                Activity Feed
+              </Typography>
+            </Grid>
+          </Grid>
           <Feed></Feed>
         </Paper>
         <Paper className={classes.mainArea} elevation={24}>
