@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   parallax: {
     marginTop: "-400px",
     [theme.breakpoints.up("md")]: {
-      marginTop: "-310px",
+      marginTop: "-160px",
     },
   },
   cardsContainer: {
@@ -277,27 +277,6 @@ const HomeViewComponent = (props) => {
             justify="center"
             alignItems="center"
           >
-            <Grid
-              item
-              container
-              spacing={2}
-              direction="column"
-              justify="center"
-              alignItems="center"
-            >
-              <Grid item>
-                <Typography variant="h3" color="primary">
-                  Activity Feed
-                </Typography>
-              </Grid>
-              <Grid item className={classes.mainFeedHomeRoot}>
-                <MainFeed
-                  allData={allData}
-                  allComments={allComments}
-                  allRatings={allRatings}
-                />
-              </Grid>
-            </Grid>
             <Grid
               item
               container
