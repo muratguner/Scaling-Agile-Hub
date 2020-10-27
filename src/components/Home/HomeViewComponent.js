@@ -76,6 +76,9 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("md")]: {
       height: 380,
     },
+    [theme.breakpoints.up("xl")]: {
+      height: 600,
+    },
   },
   media: {
     height: 150,
