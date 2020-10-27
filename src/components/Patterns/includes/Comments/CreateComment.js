@@ -73,7 +73,7 @@ const CreateComment = (props) => {
         .length > 0
         ? true
         : false;
-    if (a) return true;
+    if (a && rating !== undefined) return true;
     return false;
   };
 
