@@ -192,6 +192,7 @@ export default class ItemsService {
       "patternName: patternName," +
       "star: star," +
       "timestamp: timestamp," +
+      "upvotes: upvotes," +
       "userid: userid," +
       "username: username" +
       "})"
@@ -536,6 +537,10 @@ export default class ItemsService {
             name: "timestamp",
             values: [Date.now()],
           },
+          {
+            name: "upvotes",
+            values: [0],
+          },
 
           {
             name: "userid",
@@ -544,6 +549,68 @@ export default class ItemsService {
           {
             name: "username",
             values: [this.getUserName()],
+          },
+        ],
+      },
+      { authorization: this.getBearerToken() }
+    );
+  }
+
+  static upvoteFeedback(
+    id,
+    name,
+    comment,
+    isSubCommentOfTemp,
+    pattern,
+    patternName,
+    value,
+    timestamp,
+    upvotes,
+    userid,
+    username
+  ) {
+    return FetchService.sendPut(
+      "https://sah.sebis.in.tum.de/api/v1/entities/" + id,
+      {
+        name: name,
+        attributes: [
+          {
+            name: "comment",
+            values: [comment],
+          },
+          {
+            name: "isSubCommentOf",
+            values: [isSubCommentOfTemp],
+          },
+          {
+            name: "pattern",
+            values: [pattern],
+          },
+          {
+            name: "patternName",
+            values: [patternName],
+          },
+          {
+            name: "star",
+            values: [value],
+          },
+
+          {
+            name: "timestamp",
+            values: [timestamp],
+          },
+
+          {
+            name: "userid",
+            values: [userid],
+          },
+          {
+            name: "username",
+            values: [username],
+          },
+          {
+            name: "upvotes",
+            values: [upvotes],
           },
         ],
       },

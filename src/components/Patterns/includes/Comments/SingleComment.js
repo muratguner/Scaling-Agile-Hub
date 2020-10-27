@@ -71,17 +71,18 @@ const SingleComment = (props) => {
   const [expanded, setExpanded] = React.useState(false);
 
   const sendUpvote = () => {
-    var returned = ItemsService.upvoteComment(
+    var returned = ItemsService.upvoteFeedback(
       comment.id,
       comment.name,
+      comment.comment,
+      comment.isSubCommentOf,
       comment.pattern,
       comment.patternName,
-      comment.isSubCommentOf,
+      comment.star,
       comment.timestamp,
       `${parseInt(comment.upvotes) + 1}`,
       comment.userid,
-      comment.username,
-      comment.comment
+      comment.username
     );
     returned.then((data) => {
       window.location.reload();
