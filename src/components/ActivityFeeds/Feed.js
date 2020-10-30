@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import "../../styles/Row.css";
 import ItemsService from "../../services/ItemsService";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
