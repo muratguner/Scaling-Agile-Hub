@@ -98,11 +98,11 @@ const SingleComment = (props) => {
     setExpanded(!expanded);
   };
   const getQuotedComment = () => {
-    var a = comments.filter(function (val, index) {
-      return val.name === comment.isSubCommentOf;
+    var a = comments.filter(function (feedback, index) {
+      return feedback.name === comment.isSubCommentOf;
     });
     if (a.length > 0) {
-      return "<strong>Replying to: </strong>" + a[0].value;
+      return "<strong>Replying to: </strong>" + a[0].comment;
     }
   };
 
@@ -111,9 +111,11 @@ const SingleComment = (props) => {
       <Card variant="outlined">
         <CardHeader
           avatar={
-            <Avatar className={classes.userIcon} color="primary">
-              {comment.username[0]}
-            </Avatar>
+            <Avatar
+              aria-label="recipe"
+              className={classes.avatar}
+              src={comment.profilePicture}
+            ></Avatar>
           }
           title={
             <Typography component={"div"} variant="subtitle2">
@@ -130,13 +132,17 @@ const SingleComment = (props) => {
             </Typography>
           }
         />
-        <div className={classes.rating}>
-          <StarRatingComponent
-            name="rating"
-            starCount={5}
-            value={comment.star}
-          />
-        </div>
+        {(comment.isSubCommentOf === undefined ||
+          comment.isSubCommentOf === null) && (
+          <div className={classes.rating}>
+            <StarRatingComponent
+              name="rating"
+              starCount={5}
+              value={comment.star}
+              starColor={"#195b8b"}
+            />
+          </div>
+        )}
 
         <CardContent>
           {comment.isSubCommentOf === undefined ||
@@ -206,6 +212,7 @@ const SingleComment = (props) => {
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <CreateComment
+              commentOnly={true}
               pattern={comment.pattern}
               patternName={comment.patternName}
               isSubCommentOf={comment.name}

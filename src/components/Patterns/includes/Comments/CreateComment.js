@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme) => {
 });
 
 const CreateComment = (props) => {
-  const { pattern, patternName, isSubCommentOf } = props;
+  const { commentOnly, pattern, patternName, isSubCommentOf } = props;
   const classes = useStyles();
   const [commentEditorState, setCommentEditorState] = React.useState(
     RichTextEditor.createValueFromString("", "html")
@@ -74,21 +74,28 @@ const CreateComment = (props) => {
         ? true
         : false;
     if (a && rating !== undefined) return true;
+    if (a && commentOnly === true) {
+      setRating(-1);
+      return true;
+    }
     return false;
   };
 
   return (
     <div className={classes.createCommentRoot}>
       <div className={classes.editorBounds}>
-        <div>
-          <h2>Rating</h2>
-          <StarRatingComponent
-            name="rate1"
-            starCount={5}
-            value={rating}
-            onStarClick={setRating}
-          />
-        </div>
+        {commentOnly === false && (
+          <div>
+            <h2>Rating</h2>
+            <StarRatingComponent
+              name="rate1"
+              starCount={5}
+              value={rating}
+              onStarClick={setRating}
+              starColor={"#195b8b"}
+            />
+          </div>
+        )}
         <h2>Comment</h2>
         <RichTextEditor
           value={commentEditorState}

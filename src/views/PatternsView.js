@@ -33,16 +33,60 @@ const PatternsView = (props) => {
     setData(data);
   };
 
-  const handleSetComments = (comments) => {
-    setComments(comments);
+  const setImage = async function setImage(array, id) {
+    setComments(
+      (commentsGlobal = commentsGlobal.map((item) =>
+        item.profilePicture === " " && item.userid === id
+          ? {
+              ...item,
+              profilePicture:
+                array[array.findIndex((obj) => obj.userid == item.userid)]
+                  .image,
+            }
+          : item
+      ))
+    );
   };
 
+  const getImage = async function getImage(id) {
+    return new Promise((resolve, reject) => {
+      const picData = ItemsService.getPictures(id);
+      picData
+        .then((data) => {
+          readFile(data).then((data) => {
+            setTimeout(function () {
+              resolve({ userid: id, image: data });
+            }, 100);
+          });
+        })
+        .catch((error) => {
+          console.log("Error");
+        });
+    });
+  };
+
+  const readFile = function read_file(data) {
+    return new Promise((resolve, reject) => {
+      let base64data;
+      const fileReaderInstance = new FileReader();
+      fileReaderInstance.readAsDataURL(data);
+      fileReaderInstance.onload = resolve;
+      fileReaderInstance.onload = () => {
+        base64data = fileReaderInstance.result;
+        setTimeout(function () {
+          resolve(base64data);
+        }, 100);
+      };
+    });
+  };
+  let commentsGlobal = [];
   React.useEffect(() => {
     const unresolvedData = ItemsService.getPatternData();
     const feedbackData = ItemsService.getFeedback();
     const numEntities = unresolvedData.flatMap((e) => e).length;
 
     let dataSet = [];
+
     unresolvedData.forEach((level, indexLevel) => {
       dataSet.push([]);
       level.forEach((entity) => {
@@ -62,7 +106,20 @@ const PatternsView = (props) => {
       });
     });
     feedbackData.promise.then((data) => {
-      handleSetComments(data.value);
+      let commentsArray = data.value;
+
+      commentsGlobal = commentsArray.map((comment) => ({
+        ...comment,
+        profilePicture: " ",
+      }));
+
+      let bufferArray = [];
+      commentsGlobal.forEach((element) => {
+        getImage(element.userid).then((data) => {
+          bufferArray.push(data);
+          setImage(bufferArray, element.userid);
+        });
+      });
     });
   }, []);
 
