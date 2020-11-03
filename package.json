@@ -46,6 +46,7 @@
     "chart.js": "^2.9.3",
     "core-js-pure": "^3.1.4",
     "d3": "^5.7.0",
+    "dateformat": "^3.0.3",
     "firebase": "^7.24.0",
     "font-awesome": "^4.7.0",
     "little-loader": "^0.2.0",

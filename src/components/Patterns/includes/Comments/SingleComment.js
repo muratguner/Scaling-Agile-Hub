@@ -21,6 +21,8 @@ import DeleteIcon from "@material-ui/icons/Delete";
 import CreateComment from "./CreateComment";
 import StarRatingComponent from "react-star-rating-component";
 
+var dateFormat = require("dateformat");
+
 const useStyles = makeStyles((theme) => {
   return {
     singleCommentRoot: {
@@ -128,7 +130,10 @@ const SingleComment = (props) => {
               variant="body2"
               style={{ color: "grey" }}
             >
-              {new Date(parseInt(comment.timestamp)).toUTCString()}
+              {dateFormat(
+                new Date(parseInt(comment.timestamp)),
+                "dddd, mmmm dS, yyyy, h:MM"
+              )}
             </Typography>
           }
         />
