@@ -25,7 +25,11 @@ const useStyles = makeStyles((theme) => ({
   },
   card: {
     width: 300,
-    height: 100,
+    height: 60,
+    paddingLeft: theme.spacing(0.1),
+    paddingRight: theme.spacing(0.1),
+    paddingTop: theme.spacing(0.1),
+    paddingBottom: theme.spacing(0.1),
   },
   media: {
     height: 0,
@@ -45,12 +49,24 @@ const useStyles = makeStyles((theme) => ({
     backgroundColor: "#195b8b",
   },
   chip: {
-    paddingLeft: theme.spacing(0.25),
-    paddingRight: theme.spacing(0.25),
-    paddingTop: theme.spacing(0.25),
-    paddingBottom: theme.spacing(0.25),
+    paddingLeft: theme.spacing(0.1),
+    paddingRight: theme.spacing(0.1),
+    paddingTop: theme.spacing(0.1),
+    paddingBottom: theme.spacing(0.1),
     marginRight: theme.spacing(1),
     height: 50,
+  },
+  box: {
+    paddingLeft: theme.spacing(0.1),
+    paddingRight: theme.spacing(0.1),
+    paddingTop: theme.spacing(0.1),
+    paddingBottom: theme.spacing(0.1),
+  },
+  cardContent: {
+    paddingLeft: theme.spacing(0.1),
+    paddingRight: theme.spacing(0.1),
+    paddingTop: theme.spacing(0.1),
+    paddingBottom: theme.spacing(0.5),
   },
 }));
 
@@ -175,70 +191,82 @@ function Feed(props) {
         overflowY: "hidden",
         overflowX: "scroll",
         display: "flex",
-        paddingBottom: "50px",
+        paddingBottom: "20px",
+        paddingTop: "4px",
       }}
     >
       {loading && (
-        <Box display="flex" p={1} bgcolor="background.paper">
-          {comments.map((value, i) => (
-            <Card className={classes.root} key={value.id}>
-              <CardHeader
-                avatar={
-                  <Avatar
-                    aria-label="recipe"
-                    className={classes.avatar}
-                    src={value.profilePicture}
-                  ></Avatar>
-                }
-                action={
-                  <IconButton
-                    aria-label="Clear"
-                    onClick={() => {
-                      removeItem(i);
-                    }}
-                  >
-                    <ClearIcon />
-                  </IconButton>
-                }
-                title={value.username + " has Feedback on:"}
-              />
-              <div>
-                <StarRatingComponent
-                  name="rating"
-                  starCount={5}
-                  value={value.star}
-                />
-              </div>
-              <CardContent>
-                <Chip
-                  onClick={() => {
-                    showPattern(value.pattern);
-                  }}
-                  className={classes.chip}
-                  avatar={
-                    <Avatar
-                      style={{
-                        color: "white",
-                        height: "40px",
-                        width: "40px",
-                        backgroundColor:
-                          (value.pattern.charAt(0) === "C" && "#f29b30") ||
-                          (value.pattern.charAt(0) === "A" && "#e74c3c") ||
-                          (value.pattern.charAt(0) === "M" && "#3498db") ||
-                          (value.pattern.charAt(0) === "P" && "#34495e") ||
-                          (value.pattern.charAt(0) === "V" && "#4eba6f") ||
-                          (value.pattern.charAt(2) === "o" && "#e74c3c"),
+        <Box
+          display="flex"
+          p={1}
+          className={classes.box}
+          bgcolor="background.paper"
+        >
+          {comments.map(
+            (value, i) =>
+              (value.isSubCommentOf === undefined ||
+                value.isSubCommentOf === null) && (
+                <Card className={classes.root} key={value.id}>
+                  <CardHeader
+                    avatar={
+                      <Avatar
+                        aria-label="recipe"
+                        className={classes.avatar}
+                        src={value.profilePicture}
+                      ></Avatar>
+                    }
+                    action={
+                      <IconButton
+                        aria-label="Clear"
+                        onClick={() => {
+                          removeItem(i);
+                        }}
+                      >
+                        <ClearIcon />
+                      </IconButton>
+                    }
+                    title={value.username + " has rated on:"}
+                  />
+
+                  <CardContent className={classes.cardContent}>
+                    <Chip
+                      onClick={() => {
+                        showPattern(value.pattern);
                       }}
-                    >
-                      {value.pattern}
-                    </Avatar>
-                  }
-                  label={value.patternName.substring(0, 30)}
-                />
-              </CardContent>
-              <CardActions disableSpacing></CardActions>
-            </Card>
-          ))}
+                      className={classes.chip}
+                      avatar={
+                        <Avatar
+                          style={{
+                            color: "white",
+                            height: "40px",
+                            width: "40px",
+                            backgroundColor:
+                              (value.pattern.charAt(0) === "C" && "#f29b30") ||
+                              (value.pattern.charAt(0) === "A" && "#e74c3c") ||
+                              (value.pattern.charAt(0) === "M" && "#3498db") ||
+                              (value.pattern.charAt(0) === "P" && "#34495e") ||
+                              (value.pattern.charAt(0) === "V" && "#4eba6f") ||
+                              (value.pattern.charAt(2) === "o" && "#e74c3c"),
+                          }}
+                        >
+                          {value.pattern}
+                        </Avatar>
+                      }
+                      label={value.patternName.substring(0, 30)}
+                    />
+                  </CardContent>
+                  <div>
+                    <StarRatingComponent
+                      name="rating"
+                      starCount={5}
+                      value={value.star}
+                      starColor={"#195b8b"}
+                    />
+                  </div>
+                  <CardActions disableSpacing></CardActions>
+                </Card>
+              )
+          )}
         </Box>
       )}
     </div>

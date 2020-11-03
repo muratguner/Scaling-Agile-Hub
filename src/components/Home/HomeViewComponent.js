@@ -223,7 +223,7 @@ const HomeViewComponent = (props) => {
           <Grid
             item
             container
-            spacing={2}
+            spacing={1}
             direction="column"
             justify="center"
             alignItems="center"
