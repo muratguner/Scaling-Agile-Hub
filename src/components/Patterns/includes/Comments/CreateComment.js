@@ -85,18 +85,25 @@ const CreateComment = (props) => {
     <div className={classes.createCommentRoot}>
       <div className={classes.editorBounds}>
         {commentOnly === false && (
-          <div>
-            <h2>Rating</h2>
-            <StarRatingComponent
-              name="rate1"
-              starCount={5}
-              value={rating}
-              onStarClick={setRating}
-              starColor={"#195b8b"}
-            />
+          <div style={{ paddingBottom: "8px" }}>
+            <Typography variant="h5" color="primary">
+              Rating
+            </Typography>
+            <div style={{ paddingTop: "8px" }}>
+              {" "}
+              <StarRatingComponent
+                name="rate1"
+                starCount={5}
+                value={rating}
+                onStarClick={setRating}
+                starColor={"#195b8b"}
+              />
+            </div>
           </div>
         )}
-        <h2>Comment</h2>
+        <Typography variant="h5" color="primary">
+          Comment
+        </Typography>
         <RichTextEditor
           value={commentEditorState}
           onChange={updateComment}
