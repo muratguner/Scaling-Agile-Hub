@@ -68,9 +68,15 @@ const useStyles = makeStyles((theme) => {
 });
 
 const SingleComment = (props) => {
-  const { comment, comments } = props;
+  const [comment, setComment] = React.useState({ ...props.comment });
+  const { comments } = props;
+
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+
+  React.useEffect(() => {
+    setComment(comment);
+  }, [comment]);
 
   const sendUpvote = () => {
     var returned = ItemsService.upvoteFeedback(
@@ -87,7 +93,7 @@ const SingleComment = (props) => {
       comment.username
     );
     returned.then((data) => {
-      window.location.reload();
+      setComment({ ...comment, upvotes: parseInt(comment.upvotes) + 1 });
     });
   };
   const deleteComment = () => {
@@ -132,7 +138,7 @@ const SingleComment = (props) => {
             >
               {dateFormat(
                 new Date(parseInt(comment.timestamp)),
-                "dddd, mmmm dS, yyyy, h:MM"
+                "dddd, mmmm dS, yyyy, h:MM TT"
               )}
             </Typography>
           }
