@@ -91,14 +91,16 @@ const CreateComment = (props) => {
             </Typography>
             <div style={{ paddingTop: "8px" }}>
               {" "}
-              <StarRatingComponent
-                name="rate1"
-                starCount={5}
-                value={rating}
-                onStarClick={setRating}
-                starColor={"#195b8b"}
-                emptyStarColor={"#cecece"}
-              />
+              <div style={{ fontSize: 32 }}>
+                <StarRatingComponent
+                  name="rate1"
+                  starCount={5}
+                  value={rating}
+                  onStarClick={setRating}
+                  starColor={"#195b8b"}
+                  emptyStarColor={"#cecece"}
+                />
+              </div>
             </div>
           </div>
         )}
