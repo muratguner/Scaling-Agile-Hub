@@ -240,12 +240,12 @@ const PatternViewComponent = (props) => {
         return {
           entityName: entity.description,
           categories: Object.keys(entity.data[0]).includes("category")
-            ? [
-                ...new Set(entity.data.map((item) => item.category)),
-              ].map((key) => ({
-                categoryName: key,
-                data: entity.data.filter((item) => item.category === key),
-              }))
+            ? [...new Set(entity.data.map((item) => item.category))].map(
+                (key) => ({
+                  categoryName: key,
+                  data: entity.data.filter((item) => item.category === key),
+                })
+              )
             : [{ categoryName: "all", data: entity.data }],
         };
       });
@@ -797,6 +797,7 @@ const PatternViewComponent = (props) => {
       <div>
         <Header history={history} />
         <SinglePatternViewComponent
+          callBack={props.callBack}
           history={history}
           data={
             filteredData

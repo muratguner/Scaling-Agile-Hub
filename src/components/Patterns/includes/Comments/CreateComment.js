@@ -63,7 +63,7 @@ const CreateComment = (props) => {
       commentEditorState.toString("html")
     );
     returned.then((data) => {
-      window.location.reload();
+      props.callBack("reload" + Math.random().toString(36).substring(7));
     });
   };
 
@@ -97,6 +97,7 @@ const CreateComment = (props) => {
                 value={rating}
                 onStarClick={setRating}
                 starColor={"#195b8b"}
+                emptyStarColor={"#cecece"}
               />
             </div>
           </div>

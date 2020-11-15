@@ -4,6 +4,7 @@ import Typography from "@material-ui/core/Typography";
 import SingleComment from "./SingleComment";
 import CreateComment from "./CreateComment";
 import ItemsService from "../../../../services/ItemsService";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -23,12 +24,43 @@ const useStyles = makeStyles((theme) => {
       width: "100%",
       maxWidth: "100%",
     },
+    loader: {
+      display: "flex",
+      flexDirection: "column",
+      alignSelf: "center",
+      marginTop: theme.spacing(1),
+      marginBottom: theme.spacing(1),
+      width: "100%",
+      maxWidth: "100%",
+    },
   };
 });
 
 const CommentsView = (props) => {
   const { comments, pattern, patternName } = props;
+  const [
+    commentsForSelectedPatternState,
+    setCommentsForSelectedPatternState,
+  ] = React.useState([...props.comments]);
+  const [reload, setReload] = React.useState(false);
+
   const classes = useStyles();
+  React.useEffect(() => {
+    setReload(false);
+
+    setCommentsForSelectedPatternState([
+      ...comments
+        .filter(function (row) {
+          return row.pattern === pattern;
+        })
+        .sort(function (a, b) {
+          return b.timestamp - a.timestamp;
+        }),
+    ]);
+    setTimeout(() => {
+      setReload(true);
+    }, 1000);
+  }, [...props.comments]);
 
   var commentsForSelectedPattern = comments
     .filter(function (row) {
@@ -40,20 +72,33 @@ const CommentsView = (props) => {
   var numberOfComments = commentsForSelectedPattern.length;
   return (
     <div className={classes.root}>
-      <Typography variant="h4">{numberOfComments} Comment(s)</Typography>
-      <div className={classes.comments}>
-        {ItemsService.isLoggedIn() ? (
-          <CreateComment
-            commentOnly={false}
-            pattern={pattern}
-            patternName={patternName}
-            isSubCommentOf={null}
-          />
-        ) : null}
-        {commentsForSelectedPattern.map((comment, index) => {
-          return <SingleComment comment={comment} comments={comments} />;
-        })}
-      </div>
+      {reload ? (
+        <div>
+          <Typography variant="h4">{numberOfComments} Comment(s)</Typography>
+          <div className={classes.comments}>
+            {ItemsService.isLoggedIn() ? (
+              <CreateComment
+                callBack={props.callBack}
+                commentOnly={false}
+                pattern={pattern}
+                patternName={patternName}
+                isSubCommentOf={null}
+              />
+            ) : null}
+            {commentsForSelectedPatternState.map((comment, index) => {
+              return (
+                <SingleComment
+                  comment={comment}
+                  comments={comments}
+                  callBack={props.callBack}
+                />
+              );
+            })}
+          </div>
+        </div>
+      ) : (
+        <CircularProgress size={75} thickness={4} className={classes.loader} />
+      )}
     </div>
   );
 };

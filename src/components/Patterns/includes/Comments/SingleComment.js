@@ -99,7 +99,7 @@ const SingleComment = (props) => {
   const deleteComment = () => {
     var returned = ItemsService.deleteFeedback(comment.id);
     returned.then((data) => {
-      window.location.reload();
+      props.callBack("reload" + Math.random().toString(36).substring(7));
     });
   };
   const handleExpandClick = () => {
@@ -151,6 +151,7 @@ const SingleComment = (props) => {
               starCount={5}
               value={comment.star}
               starColor={"#195b8b"}
+              emptyStarColor={"#cecece"}
             />
           </div>
         )}
@@ -223,6 +224,7 @@ const SingleComment = (props) => {
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <CreateComment
+              callBack={props.callBack}
               commentOnly={true}
               pattern={comment.pattern}
               patternName={comment.patternName}

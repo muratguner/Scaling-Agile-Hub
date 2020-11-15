@@ -836,6 +836,7 @@ const SinglePatternViewComponent = (props) => {
         </Paper>
         <Paper elevation={6} className={classes.paperComments}>
           <CommentsView
+            callBack={props.callBack}
             comments={comments}
             pattern={data.identifier}
             patternName={data.name}

@@ -261,6 +261,7 @@ function Feed(props) {
                       starCount={5}
                       value={value.star}
                       starColor={"#195b8b"}
+                      emptyStarColor={"#cecece"}
                     />
                   </div>
                   <CardActions disableSpacing></CardActions>
