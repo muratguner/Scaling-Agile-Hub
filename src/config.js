@@ -47,10 +47,10 @@ const MAIN_TEAM_DATA = [
     link: "https://wwwmatthes.in.tum.de/pages/1cvr9a70u4c7m/Oemer-Uludag",
   },
   {
-    name: "Sinan Özgün",
-    picture: "assets/images/persons/SinanOezguen.jpg",
+    name: "Murat Güner",
+    picture: "assets/images/persons/MuratGuener.jpg",
     role: "Full Stack Developer",
-    link: "https://www.linkedin.com/in/sinan-özgün-16b24b137/",
+    link: "www.linkedin.com/in/murat-guener",
   },
 ];
 
