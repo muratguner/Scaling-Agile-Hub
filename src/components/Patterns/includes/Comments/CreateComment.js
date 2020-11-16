@@ -51,6 +51,7 @@ const CreateComment = (props) => {
   };
 
   const sendComment = () => {
+    props.reloadStart(true);
     var isSubCommentOfTemp = isSubCommentOf;
     if (isSubCommentOf === undefined || isSubCommentOf === null) {
       isSubCommentOfTemp = "";

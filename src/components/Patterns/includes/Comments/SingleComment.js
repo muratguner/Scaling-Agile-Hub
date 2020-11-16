@@ -97,6 +97,7 @@ const SingleComment = (props) => {
     });
   };
   const deleteComment = () => {
+    props.reloadStart(true);
     var returned = ItemsService.deleteFeedback(comment.id);
     returned.then((data) => {
       props.callBack("reload" + Math.random().toString(36).substring(7));
@@ -224,6 +225,7 @@ const SingleComment = (props) => {
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <CreateComment
+              reloadStart={props.reloadStart}
               callBack={props.callBack}
               commentOnly={true}
               pattern={comment.pattern}

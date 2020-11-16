@@ -42,12 +42,10 @@ const CommentsView = (props) => {
     commentsForSelectedPatternState,
     setCommentsForSelectedPatternState,
   ] = React.useState([...props.comments]);
-  const [reload, setReload] = React.useState(false);
+  const [reloadStartState, setreloadStartState] = React.useState(false);
 
   const classes = useStyles();
   React.useEffect(() => {
-    setReload(false);
-
     setCommentsForSelectedPatternState([
       ...comments
         .filter(function (row) {
@@ -58,7 +56,7 @@ const CommentsView = (props) => {
         }),
     ]);
     setTimeout(() => {
-      setReload(true);
+      setreloadStartState(false);
     }, 1000);
   }, [...props.comments]);
 
@@ -72,12 +70,13 @@ const CommentsView = (props) => {
   var numberOfComments = commentsForSelectedPattern.length;
   return (
     <div className={classes.root}>
-      {reload ? (
+      {!reloadStartState ? (
         <div>
           <Typography variant="h4">{numberOfComments} Comment(s)</Typography>
           <div className={classes.comments}>
             {ItemsService.isLoggedIn() ? (
               <CreateComment
+                reloadStart={setreloadStartState}
                 callBack={props.callBack}
                 commentOnly={false}
                 pattern={pattern}
@@ -88,6 +87,7 @@ const CommentsView = (props) => {
             {commentsForSelectedPatternState.map((comment, index) => {
               return (
                 <SingleComment
+                  reloadStart={setreloadStartState}
                   comment={comment}
                   comments={comments}
                   callBack={props.callBack}

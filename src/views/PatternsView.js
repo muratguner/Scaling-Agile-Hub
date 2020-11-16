@@ -29,7 +29,6 @@ const PatternsView = (props) => {
   const [comments, setComments] = React.useState();
   const [loading, setLoading] = React.useState(true);
   const [reload, setReload] = React.useState("");
-  const [test, setTest] = React.useState(false);
 
   const handleSetData = (data) => {
     setData(data);
