@@ -73,6 +73,7 @@ const SingleComment = (props) => {
 
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
+  const [disabled, setDisabled] = React.useState(false);
 
   React.useEffect(() => {
     setComment(comment);
@@ -93,9 +94,11 @@ const SingleComment = (props) => {
       comment.username
     );
     returned.then((data) => {
+      setDisabled(true);
       setComment({ ...comment, upvotes: parseInt(comment.upvotes) + 1 });
     });
   };
+
   const deleteComment = () => {
     props.reloadStart(true);
     var returned = ItemsService.deleteFeedback(comment.id);
@@ -179,6 +182,7 @@ const SingleComment = (props) => {
               color="primary"
               aria-label="add"
               className={classes.margin}
+              disabled={disabled}
               onClick={() => sendUpvote()}
             >
               <Icon classes={{ root: classes.iconRoot }}>
