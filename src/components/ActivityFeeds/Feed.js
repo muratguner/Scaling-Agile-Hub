@@ -12,6 +12,23 @@ import Box from "@material-ui/core/Box";
 import Chip from "@material-ui/core/Chip";
 import { useHistory } from "react-router-dom";
 import StarRatingComponent from "react-star-rating-component";
+import Tooltip from "@material-ui/core/Tooltip";
+import Typography from "@material-ui/core/Typography";
+import Brightness1Icon from "@material-ui/icons/Brightness1";
+import StarsIcon from "@material-ui/icons/Stars";
+import StarsTwoToneIcon from "@material-ui/icons/StarsTwoTone";
+import LensIcon from "@material-ui/icons/Lens";
+import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+
+const theme = createMuiTheme({
+  typography: {
+    "fontSize": 12,
+    "fontFamily": `"Roboto", "Helvetica", "Arial", sans-serif`,
+    "fontWeightLight": 400,
+    "lineHeight": 1.43,
+    "letterSpacing": "0.01071em"
+   }
+});
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,6 +84,12 @@ const useStyles = makeStyles((theme) => ({
     paddingRight: theme.spacing(0.1),
     paddingTop: theme.spacing(0.1),
     paddingBottom: theme.spacing(0.5),
+  },
+  arrow: {
+    color: "#D8D8D8",
+  },
+  tooltip: {
+    backgroundColor: "#D8D8D8",
   },
 }));
 
@@ -166,9 +189,11 @@ function Feed(props) {
     feedbackData.promise.then((data) => {
       let commentsArray = data.value;
 
-      commentsGlobal = commentsArray.map((comment) => ({
+      commentsGlobal = commentsArray.map((comment) => (
+        {
         ...comment,
         profilePicture: " ",
+        badgeColor: ((comment.upvotes > 4) ? ((comment.upvotes > 8) ? ((comment.upvotes > 10) ? "#f1b600" : "") : "#828282") : "#ab825f")
       }));
 
       let bufferArray = [];
@@ -207,26 +232,47 @@ function Feed(props) {
               (value.isSubCommentOf === undefined ||
                 value.isSubCommentOf === null) && (
                 <Card className={classes.root} key={value.id}>
-                  <CardHeader
-                    avatar={
-                      <Avatar
-                        aria-label="recipe"
-                        className={classes.avatar}
-                        src={value.profilePicture}
-                      ></Avatar>
-                    }
-                    action={
-                      <IconButton
-                        aria-label="Clear"
-                        onClick={() => {
-                          removeItem(i);
-                        }}
-                      >
-                        <ClearIcon />
-                      </IconButton>
-                    }
-                    title={value.username + " has rated on:"}
-                  />
+                  <div>
+                    <Tooltip
+                      placement="top"
+                      arrow
+                      classes={classes}
+                      title={
+                        <React.Fragment>
+                          <IconButton aria-label="badge">
+                            <StarsIcon style={{ fill: value.badgeColor, fontSize: '28px'}} />
+                            <ThemeProvider theme={theme}>
+                            <Typography  >
+                              Reputation: {value.upvotes}
+                            </Typography>
+                            </ThemeProvider>
+
+                          </IconButton>
+                        </React.Fragment>
+                      }
+                    >
+                      <CardHeader
+                        avatar={
+                          <Avatar
+                            aria-label="recipe"
+                            className={classes.avatar}
+                            src={value.profilePicture}
+                          ></Avatar>
+                        }
+                        action={
+                          <IconButton
+                            aria-label="Clear"
+                            onClick={() => {
+                              removeItem(i);
+                            }}
+                          >
+                            <ClearIcon />
+                          </IconButton>
+                        }
+                        title={value.username + " has rated on:"}
+                      />
+                    </Tooltip>
+                  </div>
 
                   <CardContent className={classes.cardContent}>
                     <Chip
