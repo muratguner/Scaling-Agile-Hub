@@ -139,6 +139,17 @@ function Feed(props) {
     }, 100);
   };
 
+  const getBadgeColor = function getBadgeColor(userid) {
+    var userReputation = userReputationsMap.get(userid);
+    if (userReputation >= 10 && userReputation <= 20) {
+      return '#ab825f';
+    } else if (userReputation > 20 && userReputation <30) {
+      return '#828282';
+    } else {
+      return '#f1b600';
+    }
+  }
+
   const showPattern = async function showPattern(pattern) {
     let patternType =
       (pattern.charAt(0) === "C" && "Concerns") ||
@@ -182,6 +193,7 @@ function Feed(props) {
   };
 
   let commentsGlobal = [];
+  var userReputationsMap = new Map();
   const fetchData = async function fetchData() {
     const feedbackData = ItemsService.getFeedback();
     const clapCountFromBackend = ItemsService.getClapCount();
@@ -189,11 +201,22 @@ function Feed(props) {
     feedbackData.promise.then((data) => {
       let commentsArray = data.value;
 
+     
+      commentsArray.forEach((element) => { 
+       if( userReputationsMap.get(element.userid) == undefined) {
+        userReputationsMap.set(element.userid, element.upvotes)
+       } else {
+        var currentReputation = userReputationsMap.get(element.userid);
+        userReputationsMap.set(element.userid, parseInt(element.upvotes) + parseInt(currentReputation))
+       }
+      });
+
       commentsGlobal = commentsArray.map((comment) => (
         {
         ...comment,
         profilePicture: " ",
-        badgeColor: ((comment.upvotes > 4) ? ((comment.upvotes > 8) ? ((comment.upvotes > 10) ? "#f1b600" : "") : "#828282") : "#ab825f")
+        badgeColor: getBadgeColor(comment.userid),
+        reputation: userReputationsMap.get(comment.userid)
       }));
 
       let bufferArray = [];
@@ -243,7 +266,7 @@ function Feed(props) {
                             <StarsIcon style={{ fill: value.badgeColor, fontSize: '28px'}} />
                             <ThemeProvider theme={theme}>
                             <Typography  >
-                              Reputation: {value.upvotes}
+                              Reputation: {value.reputation}
                             </Typography>
                             </ThemeProvider>
 
