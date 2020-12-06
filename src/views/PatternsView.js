@@ -80,7 +80,20 @@ const PatternsView = (props) => {
       };
     });
   };
+
+  const getBadgeColor = function getBadgeColor(userid) {
+    var userReputation = userReputationsMap.get(userid);
+    if (userReputation >= 10 && userReputation <= 20) {
+      return "#ab825f";
+    } else if (userReputation > 20 && userReputation < 30) {
+      return "#828282";
+    } else {
+      return "#f1b600";
+    }
+  };
+
   let commentsGlobal = [];
+  var userReputationsMap = new Map();
   React.useEffect(() => {
     const unresolvedData = ItemsService.getPatternData();
     const feedbackData = ItemsService.getFeedback();
@@ -109,9 +122,23 @@ const PatternsView = (props) => {
     feedbackData.promise.then((data) => {
       let commentsArray = data.value;
 
+      commentsArray.forEach((element) => {
+        if (userReputationsMap.get(element.userid) == undefined) {
+          userReputationsMap.set(element.userid, element.upvotes);
+        } else {
+          var currentReputation = userReputationsMap.get(element.userid);
+          userReputationsMap.set(
+            element.userid,
+            parseInt(element.upvotes) + parseInt(currentReputation)
+          );
+        }
+      });
+
       commentsGlobal = commentsArray.map((comment) => ({
         ...comment,
         profilePicture: " ",
+        badgeColor: getBadgeColor(comment.userid),
+        reputation: userReputationsMap.get(comment.userid),
       }));
 
       let bufferArray = [];

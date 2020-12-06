@@ -105,7 +105,6 @@ const ProfilePageDialog = (props) => {
   const [currentValues, setCurrentValues] = React.useState("");
 
   const getUserInfo = (userId, token) => {
-    window.scrollTo(0, 0);
     ItemsService.getUserInfo(userId, token)
       .then((data) => {
         setFirstName(data.name);

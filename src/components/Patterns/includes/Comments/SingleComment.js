@@ -20,6 +20,7 @@ import ReactHtmlParser from "react-html-parser";
 import DeleteIcon from "@material-ui/icons/Delete";
 import CreateComment from "./CreateComment";
 import StarRatingComponent from "react-star-rating-component";
+import ProfilePageDialog from "../ProfilePageDialog"
 
 var dateFormat = require("dateformat");
 
@@ -74,6 +75,8 @@ const SingleComment = (props) => {
   const classes = useStyles();
   const [expanded, setExpanded] = React.useState(false);
   const [disabled, setDisabled] = React.useState(false);
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [userData, setUserData] = React.useState("");
 
   React.useEffect(() => {
     setComment(comment);
@@ -118,10 +121,20 @@ const SingleComment = (props) => {
     }
   };
 
+  const handleDialogOpen = (value) => {
+    console.log(value);
+    setUserData(value);
+    setDialogOpen(true);
+  };
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
+
   return (
     <div className={classes.singleCommentRoot}>
       <Card variant="outlined">
         <CardHeader
+          onClick={() => handleDialogOpen(comment)}
           avatar={
             <Avatar
               aria-label="recipe"
@@ -239,6 +252,11 @@ const SingleComment = (props) => {
           </CardContent>
         </Collapse>
       </Card>
+      <ProfilePageDialog
+        open={dialogOpen}
+        handleDialogClose={handleDialogClose}
+        userData={userData}
+      />
     </div>
   );
 };
