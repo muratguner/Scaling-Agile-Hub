@@ -18,16 +18,17 @@ import Brightness1Icon from "@material-ui/icons/Brightness1";
 import StarsIcon from "@material-ui/icons/Stars";
 import StarsTwoToneIcon from "@material-ui/icons/StarsTwoTone";
 import LensIcon from "@material-ui/icons/Lens";
-import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
+import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import ProfilePageDialog from "../Patterns/includes/ProfilePageDialog";
 
 const theme = createMuiTheme({
   typography: {
-    "fontSize": 12,
-    "fontFamily": `"Roboto", "Helvetica", "Arial", sans-serif`,
-    "fontWeightLight": 400,
-    "lineHeight": 1.43,
-    "letterSpacing": "0.01071em"
-   }
+    fontSize: 12,
+    fontFamily: `"Roboto", "Helvetica", "Arial", sans-serif`,
+    fontWeightLight: 400,
+    lineHeight: 1.43,
+    letterSpacing: "0.01071em",
+  },
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -98,6 +99,8 @@ function Feed(props) {
   const classes = useStyles();
   const [loading, setLoading] = useState(false);
   const history = useHistory();
+  const [dialogOpen, setDialogOpen] = React.useState(false);
+  const [userData, setUserData] = React.useState("");
 
   const getImage = async function getImage(id) {
     return new Promise((resolve, reject) => {
@@ -142,13 +145,13 @@ function Feed(props) {
   const getBadgeColor = function getBadgeColor(userid) {
     var userReputation = userReputationsMap.get(userid);
     if (userReputation >= 10 && userReputation <= 20) {
-      return '#ab825f';
-    } else if (userReputation > 20 && userReputation <30) {
-      return '#828282';
+      return "#ab825f";
+    } else if (userReputation > 20 && userReputation < 30) {
+      return "#828282";
     } else {
-      return '#f1b600';
+      return "#f1b600";
     }
-  }
+  };
 
   const showPattern = async function showPattern(pattern) {
     let patternType =
@@ -160,6 +163,15 @@ function Feed(props) {
       (pattern.charAt(2) === "o" && "Coordination Patterns");
 
     history.push(`/patterns/${patternType}/${pattern}`);
+  };
+
+  const handleDialogOpen = (value) => {
+    console.log(value);
+    setUserData(value);
+    setDialogOpen(true);
+  };
+  const handleDialogClose = () => {
+    setDialogOpen(false);
   };
 
   React.useEffect(() => {
@@ -201,22 +213,23 @@ function Feed(props) {
     feedbackData.promise.then((data) => {
       let commentsArray = data.value;
 
-     
-      commentsArray.forEach((element) => { 
-       if( userReputationsMap.get(element.userid) == undefined) {
-        userReputationsMap.set(element.userid, element.upvotes)
-       } else {
-        var currentReputation = userReputationsMap.get(element.userid);
-        userReputationsMap.set(element.userid, parseInt(element.upvotes) + parseInt(currentReputation))
-       }
+      commentsArray.forEach((element) => {
+        if (userReputationsMap.get(element.userid) == undefined) {
+          userReputationsMap.set(element.userid, element.upvotes);
+        } else {
+          var currentReputation = userReputationsMap.get(element.userid);
+          userReputationsMap.set(
+            element.userid,
+            parseInt(element.upvotes) + parseInt(currentReputation)
+          );
+        }
       });
 
-      commentsGlobal = commentsArray.map((comment) => (
-        {
+      commentsGlobal = commentsArray.map((comment) => ({
         ...comment,
         profilePicture: " ",
         badgeColor: getBadgeColor(comment.userid),
-        reputation: userReputationsMap.get(comment.userid)
+        reputation: userReputationsMap.get(comment.userid),
       }));
 
       let bufferArray = [];
@@ -255,48 +268,27 @@ function Feed(props) {
               (value.isSubCommentOf === undefined ||
                 value.isSubCommentOf === null) && (
                 <Card className={classes.root} key={value.id}>
-                  <div>
-                    <Tooltip
-                      placement="top"
-                      arrow
-                      classes={classes}
-                      title={
-                        <React.Fragment>
-                          <IconButton aria-label="badge">
-                            <StarsIcon style={{ fill: value.badgeColor, fontSize: '28px'}} />
-                            <ThemeProvider theme={theme}>
-                            <Typography  >
-                              Reputation: {value.reputation}
-                            </Typography>
-                            </ThemeProvider>
-
-                          </IconButton>
-                        </React.Fragment>
-                      }
-                    >
-                      <CardHeader
-                        avatar={
-                          <Avatar
-                            aria-label="recipe"
-                            className={classes.avatar}
-                            src={value.profilePicture}
-                          ></Avatar>
-                        }
-                        action={
-                          <IconButton
-                            aria-label="Clear"
-                            onClick={() => {
-                              removeItem(i);
-                            }}
-                          >
-                            <ClearIcon />
-                          </IconButton>
-                        }
-                        title={value.username + " has rated on:"}
-                      />
-                    </Tooltip>
-                  </div>
-
+                  <CardHeader
+                    onClick={() => handleDialogOpen(value)}
+                    avatar={
+                      <Avatar
+                        aria-label="recipe"
+                        className={classes.avatar}
+                        src={value.profilePicture}
+                      ></Avatar>
+                    }
+                    action={
+                      <IconButton
+                        aria-label="Clear"
+                        onClick={() => {
+                          removeItem(i);
+                        }}
+                      >
+                        <ClearIcon />
+                      </IconButton>
+                    }
+                    title={value.username + " has rated on:"}
+                  />
                   <CardContent className={classes.cardContent}>
                     <Chip
                       onClick={() => {
@@ -339,6 +331,11 @@ function Feed(props) {
           )}
         </Box>
       )}
+      <ProfilePageDialog
+        open={dialogOpen}
+        handleDialogClose={handleDialogClose}
+        userData={userData}
+      />
     </div>
   );
 }
