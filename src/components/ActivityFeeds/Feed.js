@@ -269,9 +269,9 @@ function Feed(props) {
                 value.isSubCommentOf === null) && (
                 <Card className={classes.root} key={value.id}>
                   <CardHeader
-                    onClick={() => handleDialogOpen(value)}
                     avatar={
                       <Avatar
+                        onClick={() => handleDialogOpen(value)}
                         aria-label="recipe"
                         className={classes.avatar}
                         src={value.profilePicture}

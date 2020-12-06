@@ -134,9 +134,9 @@ const SingleComment = (props) => {
     <div className={classes.singleCommentRoot}>
       <Card variant="outlined">
         <CardHeader
-          onClick={() => handleDialogOpen(comment)}
           avatar={
             <Avatar
+              onClick={() => handleDialogOpen(comment)}
               aria-label="recipe"
               className={classes.avatar}
               src={comment.profilePicture}
