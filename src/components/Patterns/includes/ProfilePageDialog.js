@@ -92,7 +92,7 @@ const ProfilePageDialog = (props) => {
   const [email, setEmail] = React.useState("");
   const [affiliation, setAffiliation] = React.useState("");
   const [role, setRole] = React.useState("");
-  const [website, setWebsite] = React.useState("");
+  const [socialMedia, setSocialMedia] = React.useState("");
   const [renderAvatar, setRenderAvatar] = React.useState(true);
   const [showLoader, setShowLoader] = React.useState(true);
   const [reputation, setUserReputation] = React.useState(null);
@@ -128,11 +128,11 @@ const ProfilePageDialog = (props) => {
               : ""
             : ""
         );
-        setWebsite(
+        setSocialMedia(
           data.attributes[0]
             ? data.attributes[0].values[0]
-              ? data.attributes[0].values[0]["website"]
-                ? data.attributes[0].values[0]["website"]
+              ? data.attributes[0].values[0]["socialMedia"]
+                ? data.attributes[0].values[0]["socialMedia"]
                 : ""
               : ""
             : ""
@@ -155,10 +155,10 @@ const ProfilePageDialog = (props) => {
                 : ""
               : ""
             : "",
-          website: data.attributes[0]
+          socialMedia: data.attributes[0]
             ? data.attributes[0].values[0]
-              ? data.attributes[0].values[0]["website"]
-                ? data.attributes[0].values[0]["website"]
+              ? data.attributes[0].values[0]["socialMedia"]
+                ? data.attributes[0].values[0]["socialMedia"]
                 : ""
               : ""
             : "",
@@ -188,8 +188,9 @@ const ProfilePageDialog = (props) => {
             {label}
           </Typography>
         </Grid>
-        <Grid xs={5} item>
+        <Grid xs={5} item zeroMinWidth>
           <Typography
+            style={{overflowWrap: 'break-word'}}
             variant="h6"
             gutterBottom
             className={classes.typographyStyle}
@@ -283,7 +284,7 @@ const ProfilePageDialog = (props) => {
                     {renderTextField("REPUTATION", reputation, true)}
                     {renderTextField("AFFILIATION", affiliation, false)}
                     {renderTextField("ROLE", role, false)}
-                    {renderTextField("WEBSITE", website, false)}
+                    {renderTextField("SOCIAL MEDIA", socialMedia, false)}
                   </Grid>
                 </form>
               </Grid>

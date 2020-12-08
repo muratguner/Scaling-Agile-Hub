@@ -759,7 +759,7 @@ export default class ItemsService {
     ).then(window.location.reload());
   }
 
-  static updateUser(id, name, role, affiliation, website) {
+  static updateUser(id, name, role, affiliation, socialMedia) {
     return FetchService.sendPut(
       "https://sah.sebis.in.tum.de/api/v1/users/" + id,
       {
@@ -768,7 +768,7 @@ export default class ItemsService {
           {
             values: [
               {
-                website: website,
+                socialMedia: socialMedia,
                 role: role,
                 affiliation: affiliation,
               },

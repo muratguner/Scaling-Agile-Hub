@@ -93,7 +93,7 @@ const ProfilePage = props => {
   const [email, setEmail] = React.useState("");
   const [affiliation, setAffiliation] = React.useState("");
   const [role, setRole] = React.useState("");
-  const [website, setWebsite] = React.useState("");
+  const [socialMedia, setSocialMedia] = React.useState("");
   const [showToast, setShowToast] = React.useState(false);
   const [imageToast, setImageToast] = React.useState(false);
   const [editForm, setEditForm] = React.useState(false);
@@ -118,10 +118,10 @@ const ProfilePage = props => {
     }
     if(
       !/^(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$/.test(
-        website
+        socialMedia
       )
     ){
-      throw Error("Website is not valid.");
+      throw Error("Social Media link is not valid.");
     }
     
   };
@@ -140,8 +140,8 @@ const ProfilePage = props => {
         setAffiliation(data.attributes[0]? 
           (data.attributes[0].values[0]? (data.attributes[0].values[0]["affiliation"]? data.attributes[0].values[0]["affiliation"]: "") : "") 
           : "");
-        setWebsite(data.attributes[0]? 
-          (data.attributes[0].values[0]? (data.attributes[0].values[0]["website"]? data.attributes[0].values[0]["website"]: "") : "") 
+        setSocialMedia(data.attributes[0]? 
+          (data.attributes[0].values[0]? (data.attributes[0].values[0]["socialMedia"]? data.attributes[0].values[0]["socialMedia"]: "") : "") 
           : "");
 
           setCurrentValues({
@@ -153,8 +153,8 @@ const ProfilePage = props => {
             "role": data.attributes[0]? 
             (data.attributes[0].values[0]? (data.attributes[0].values[0]["role"]? data.attributes[0].values[0]["role"]: "") : "") 
             : (""),
-            "website":data.attributes[0]? 
-            (data.attributes[0].values[0]? (data.attributes[0].values[0]["website"]? data.attributes[0].values[0]["website"]: "") : "") 
+            "socialMedia":data.attributes[0]? 
+            (data.attributes[0].values[0]? (data.attributes[0].values[0]["socialMedia"]? data.attributes[0].values[0]["socialMedia"]: "") : "") 
             : ("")
 
           });
@@ -249,8 +249,8 @@ const ProfilePage = props => {
       case "affiliation":
         setAffiliation(event.target.value);
         break;
-      case "website":
-        setWebsite(event.target.value);
+      case "socialMedia":
+        setSocialMedia(event.target.value);
         break;
       default:
         break;
@@ -292,7 +292,7 @@ const ProfilePage = props => {
         firstName,
         role,
         affiliation,
-        website
+        socialMedia
       );
 
       setCurrentValues({
@@ -300,7 +300,7 @@ const ProfilePage = props => {
         "email": email,
         "affiliation": affiliation,
         "role": role,
-        "website": website
+        "socialMedia": socialMedia
       });
 
       enableShowLoader();
@@ -317,7 +317,7 @@ const ProfilePage = props => {
     setEmail(currentValues["email"]);
     setAffiliation(currentValues["affiliation"]);
     setRole(currentValues["role"]);
-    setWebsite(currentValues["website"]);
+    setSocialMedia(currentValues["socialMedia"]);
 
     console.log(currentValues);
 
@@ -414,7 +414,7 @@ const ProfilePage = props => {
               {renderTextField('EMAIL ADDRESS',email,'email',true,true)}
               {renderTextField('AFFILIATION',affiliation,'affiliation',false,false)}
               {renderTextField('ROLE',role,'role',false,false)}
-              {renderTextField('WEBSITE',website,'website',false,false)}
+              {renderTextField('SOCIAL MEDIA',socialMedia,'socialMedia',false,false)}
               <Grid item xs={12} container justify="center" alignItems="center">
                     {
                       !editForm ?
