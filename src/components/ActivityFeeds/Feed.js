@@ -272,6 +272,7 @@ function Feed(props) {
                     avatar={
                       <Avatar
                         onClick={() => handleDialogOpen(value)}
+                        style={{cursor: "pointer"}}
                         aria-label="recipe"
                         className={classes.avatar}
                         src={value.profilePicture}

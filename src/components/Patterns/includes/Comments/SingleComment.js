@@ -137,6 +137,7 @@ const SingleComment = (props) => {
           avatar={
             <Avatar
               onClick={() => handleDialogOpen(comment)}
+              style={{cursor: "pointer"}}
               aria-label="recipe"
               className={classes.avatar}
               src={comment.profilePicture}
