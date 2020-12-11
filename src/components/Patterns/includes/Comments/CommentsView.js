@@ -41,7 +41,7 @@ const CommentsView = (props) => {
   const [
     commentsForSelectedPatternState,
     setCommentsForSelectedPatternState,
-  ] = React.useState([...props.comments]);
+  ] = React.useState([]);
   const [reloadStartState, setreloadStartState] = React.useState(false);
 
   const classes = useStyles();
