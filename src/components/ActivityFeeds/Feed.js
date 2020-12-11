@@ -102,6 +102,7 @@ function Feed(props) {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [userData, setUserData] = React.useState("");
 
+
   const getImage = async function getImage(id) {
     return new Promise((resolve, reject) => {
       const picData = ItemsService.getPictures(id);
@@ -157,9 +158,9 @@ function Feed(props) {
     let patternType =
       (pattern.charAt(0) === "C" && "Concerns") ||
       (pattern.charAt(0) === "A" && "Anti Patterns") ||
-      (pattern.charAt(0) === "M" && "Methodology Pattern") ||
+      (pattern.charAt(0) === "M" && "Methodology Patterns") ||
       (pattern.charAt(0) === "P" && "Principles") ||
-      (pattern.charAt(0) === "V" && "Visualization Pattern") ||
+      (pattern.charAt(0) === "V" && "Visualization Patterns") ||
       (pattern.charAt(2) === "o" && "Coordination Patterns");
 
     history.push(`/patterns/${patternType}/${pattern}`);
