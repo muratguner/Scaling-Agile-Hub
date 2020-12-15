@@ -201,7 +201,9 @@ function Feed(props) {
                   .image,
             }
           : item
-      ))
+      ) .sort(function (a, b) {
+        return b.timestamp - a.timestamp;
+      }))
     );
   };
 

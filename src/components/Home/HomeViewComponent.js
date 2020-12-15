@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     [theme.breakpoints.up("md")]: {
       borderRadius: "20px",
       padding: theme.spacing(4, 9, 0, 9),
-      margin: theme.spacing(0, 10, 4, 10),
+      margin: theme.spacing(2, 10, 4, 10),
     },
   },
   titleContainer: {
