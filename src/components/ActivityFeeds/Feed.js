@@ -162,7 +162,7 @@ function Feed(props) {
       (pattern.charAt(0) === "P" && "Principles") ||
       (pattern.charAt(0) === "V" && "Visualization Patterns") ||
       (pattern.charAt(2) === "o" && "Coordination Patterns");
-
+      
     history.push(`/patterns/${patternType}/${pattern}`);
   };
 

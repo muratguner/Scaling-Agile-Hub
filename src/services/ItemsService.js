@@ -809,4 +809,8 @@ export default class ItemsService {
       { Accept: "application/json", authorization: this.getBearerToken() }
     );
   }
+
+  static downloadCatalog(param) {
+   return FetchService.downloadPdf('http://localhost:5000/api/v1/latex',param); 
+  }
 }

@@ -105,6 +105,16 @@ export default class FetchService {
 			.then(data => data)
 	}
 
+	static downloadPdf(url, param) {
+		const fetchData =  {
+			method: 'post',
+			headers: {'Accept': 'application/json','Content-Type':'application/json'},
+			body: JSON.stringify({val: param})
+		} 
+
+		return fetch(url,fetchData)
+	}
+
 	
 }
 

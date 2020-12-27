@@ -1,4 +1,5 @@
 import React from "react";
+import ItemService from "../../services/ItemsService";
 import { Helmet } from "react-helmet";
 import Button from "@material-ui/core/Button";
 import Snackbar from "@material-ui/core/Snackbar";
@@ -15,9 +16,11 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import FilterIcon from "@material-ui/icons/FilterListRounded";
 import RotateIcon from "@material-ui/icons/ScreenRotationRounded";
 import AddIcon from "@material-ui/icons/Add";
+import GetAppIcon from '@material-ui/icons/GetApp';
 import Fab from "@material-ui/core/Fab";
 import PatternVisualization from "./includes/PatternVisualization";
 import Header from "../Header";
+import CircularProgress from "@material-ui/core/CircularProgress";
 // import HeaderSearchField from '../HeaderSearchField'
 import SinglePatternViewComponent from "./includes/SinglePatternViewComponent";
 import ItemsService from "../../services/ItemsService";
@@ -74,6 +77,11 @@ const useStyles = makeStyles((theme) => ({
     bottom: theme.spacing(4),
     right: theme.spacing(5),
   },
+  fabDownload: {
+    position: "fixed",
+    bottom: theme.spacing(4),
+    left: theme.spacing(5),
+  },
   stakeholderChips: {
     margin: theme.spacing(3),
     height: "40px",
@@ -91,6 +99,7 @@ const useStyles = makeStyles((theme) => ({
   viewGraphButton: {
     alignSelf: "flex-end",
   },
+ 
 }));
 
 const PatternViewComponent = (props) => {
@@ -147,6 +156,7 @@ const PatternViewComponent = (props) => {
   const [selectedStakeholders, setSelectedStakeholders] = React.useState(
     Array(stakeholderInfo.length).fill(null)
   );
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const handleCreatePatternListDialogOpen = () => {
     setCreatePatternListDialogOpen(true);
@@ -787,6 +797,17 @@ const PatternViewComponent = (props) => {
   const handleSelectedChips = () => {
     setMultipleStakeholdersBeingRendered(true);
     setInitialStateOnPageLoad(false);
+
+  };
+
+  const downloadFullPaternCatalog = (param) => {
+    setIsLoading(true);
+   ItemService.downloadCatalog(param).then((response) => {
+    setTimeout(() => {
+      window.location.href = 'http://localhost:5000/api/v1/latex/download';
+      setIsLoading(false)
+    }, 3000);
+   })
   };
 
   if (
@@ -972,6 +993,21 @@ const PatternViewComponent = (props) => {
               </div>
             </div>
           ) : null}
+          <Fab
+              variant="extended"
+              color="primary"
+              aria-label="add"
+              className={classes.fabDownload}
+              onClick={() => {downloadFullPaternCatalog("3.0")} }
+            >
+              <GetAppIcon className={classes.button} />
+              {multipleStakeholdersBeingRendered && <div>Download Stakeholder Catalog</div>}
+              {!multipleStakeholdersBeingRendered && <div>Download Full Catalog</div>}
+              {isLoading && <div style={{textAlign:"center", paddingLeft: "8px", paddingTop:"6px"}}>
+            <CircularProgress size={18} thickness={3} color="white" />
+           </div>}
+            </Fab>
+          
           {ItemsService.isLoggedIn() && ItemsService.isAdminAndVerified() ? (
             <Fab
               variant="extended"
