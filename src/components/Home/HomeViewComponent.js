@@ -9,7 +9,7 @@ import Typography from "@material-ui/core/Typography";
 import Grid from "@material-ui/core/Grid";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import useTheme from "@material-ui/core/styles/useTheme";
-
+import ItemsService from "../../services/ItemsService";
 import { PARTICLES_CONFIG, MAIN_NAV_DATA, MAIN_TEAM_DATA } from "../../config";
 import CardComponent from "../CardComponent";
 import MainFeed from "../ActivityFeeds/MainFeed";
@@ -61,10 +61,16 @@ const useStyles = makeStyles((theme) => ({
       height: 250,
     },
   },
-  parallax: {
+  parallaxFeed: {
     marginTop: "-400px",
     [theme.breakpoints.up("md")]: {
       marginTop: "-160px",
+    },
+  },
+  parallax: {
+    marginTop: "-400px",
+    [theme.breakpoints.up("md")]: {
+      marginTop: "-80px",
     },
   },
   cardsContainer: {
@@ -218,24 +224,31 @@ const HomeViewComponent = (props) => {
           SCALING AGILE HUB
         </Typography>
       </div>
-      <Parallax y={[30, -30]} className={classes.parallax}>
-        <Paper className={classes.feedArea} elevation={24}>
-          <Grid
-            item
-            container
-            spacing={1}
-            direction="column"
-            justify="center"
-            alignItems="center"
-          >
-            <Grid item>
-              <Typography variant="h4" color="primary">
-                Activity Feed
-              </Typography>
+      <Parallax
+        y={[30, -30]}
+        className={
+          ItemsService.isLoggedIn() ? classes.parallaxFeed : classes.parallax
+        }
+      >
+        {ItemsService.isLoggedIn() && (
+          <Paper className={classes.feedArea} elevation={24}>
+            <Grid
+              item
+              container
+              spacing={1}
+              direction="column"
+              justify="center"
+              alignItems="center"
+            >
+              <Grid item>
+                <Typography variant="h4" color="primary">
+                  Activity Feed
+                </Typography>
+              </Grid>
             </Grid>
-          </Grid>
-          <Feed></Feed>
-        </Paper>
+            <Feed></Feed>
+          </Paper>
+        )}
         <Paper className={classes.mainArea} elevation={24}>
           <Grid
             container

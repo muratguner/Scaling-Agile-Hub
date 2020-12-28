@@ -21,9 +21,11 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Fab from "@material-ui/core/Fab";
+import GetAppIcon from "@material-ui/icons/GetApp";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import EditIcon from "@material-ui/icons/Edit";
 import CustomSnackBar from "../../CustomSnackBar";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { GET_ENTITY_COLOR } from "../../../config";
 import PatternVisualization from "./PatternVisualization";
 import CreateOrEditPatternDialog from "./CreateOrEditPatternDialog";
@@ -138,6 +140,11 @@ const useStyles = makeStyles((theme) => {
       textAlign: "center",
       marginRight: theme.spacing(1),
     },
+    fabDownload: {
+      position: "fixed",
+      bottom: theme.spacing(4),
+      left: theme.spacing(5),
+    },
   };
 });
 
@@ -169,6 +176,7 @@ const SinglePatternViewComponent = (props) => {
   const classes = useStyles();
   const [clapData, setClapData] = React.useState([]);
   const [clapCount, setClapCount] = React.useState(0);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   var updateddata = [];
 
@@ -490,6 +498,16 @@ const SinglePatternViewComponent = (props) => {
         }
       }
     }
+  };
+
+  const downloadPaternCatalog = (param) => {
+    setIsLoading(true);
+    ItemsService.downloadCatalog(param).then((response) => {
+      setTimeout(() => {
+        window.location.href = "http://localhost:5000/api/v1/latex/download";
+        setIsLoading(false);
+      }, 3000);
+    });
   };
 
   React.useEffect(() => {
@@ -857,6 +875,30 @@ const SinglePatternViewComponent = (props) => {
           Edit
         </Fab>
       ) : null}
+
+      <Fab
+        variant="extended"
+        color="primary"
+        aria-label="add"
+        className={classes.fabDownload}
+        onClick={() => {
+          downloadPaternCatalog("3.0");
+        }}
+      >
+        <GetAppIcon className={classes.button} />
+        Download Pattern Catalog
+        {isLoading && (
+          <div
+            style={{
+              textAlign: "center",
+              paddingLeft: "8px",
+              paddingTop: "6px",
+            }}
+          >
+            <CircularProgress size={18} thickness={3} color="white" />
+          </div>
+        )}
+      </Fab>
 
       <CreateOrEditPatternDialog
         open={isEditPatternDialogOpen}
