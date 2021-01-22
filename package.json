@@ -78,6 +78,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --config webpack.prod.js",
     "start": "start http://localhost:8000/ & webpack-dev-server --config webpack.dev.js",
-    "start-mobile": "webpack-dev-server --host 0.0.0.0 --config webpack.dev.js"
+    "start-mobile": "webpack-dev-server --host 0.0.0.0 --config webpack.dev.js",
+    "heroku-prebuild": "npm install --dev"
   }
 }
