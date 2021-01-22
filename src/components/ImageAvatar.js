@@ -2,7 +2,7 @@ import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Avatar from "@material-ui/core/Avatar";
 import ItemsService from "../services/ItemsService";
-import CircularProgress from '@material-ui/core/CircularProgress';
+
 
 const useStyles = makeStyles(theme => ({
   
