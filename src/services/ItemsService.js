@@ -430,10 +430,10 @@ export default class ItemsService {
     xhr.open(
       "GET",
       "https://sah.sebis.in.tum.de/person/verify?eMail=" +
-        email +
-        "&magic=" +
-        magic +
-        "&forward=%2Fpages%2F1s0fgnba281b9%2FScaling-Agile-Frameworks-Home"
+      email +
+      "&magic=" +
+      magic +
+      "&forward=%2Fpages%2F1s0fgnba281b9%2FScaling-Agile-Frameworks-Home"
     );
     xhr.send();
   }
@@ -810,7 +810,7 @@ export default class ItemsService {
     );
   }
 
-  static downloadCatalog(param) {
-   return FetchService.downloadPdf('http://localhost:5000/api/v1/latex',param); 
+  static downloadCatalog(type, list) {
+    return FetchService.downloadPdf('http://localhost:5000/api/v1/latex', type, list);
   }
 }

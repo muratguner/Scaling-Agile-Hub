@@ -20,11 +20,11 @@ export default class FetchService {
 	static uploadFile(url, body, headers) {
 		const fetchData = {
 			method: 'POST',
-			...body && { body : body },
+			...body && { body: body },
 			...headers && { headers: headers },
-			
+
 		}
-	
+
 		return fetch(url, fetchData)
 			.then(response => {
 				if (!response.ok) {
@@ -54,7 +54,7 @@ export default class FetchService {
 			.then(data => data)
 	}
 
-  static sendGet(url, headers) {
+	static sendGet(url, headers) {
 		const fetchData = {
 			method: 'GET',
 			...headers && { headers: headers },
@@ -89,10 +89,10 @@ export default class FetchService {
 	}
 
 	static imageGet(url, headers) {
-		const fetchData =  {
+		const fetchData = {
 			method: 'GET',
 			...headers && { headers: headers },
-		} 
+		}
 
 		return fetch(url, fetchData)
 			.then(response => {
@@ -105,16 +105,16 @@ export default class FetchService {
 			.then(data => data)
 	}
 
-	static downloadPdf(url, param) {
-		const fetchData =  {
+	static downloadPdf(url, type, list) {
+		const fetchData = {
 			method: 'post',
-			headers: {'Accept': 'application/json','Content-Type':'application/json'},
-			body: JSON.stringify({val: param})
-		} 
+			headers: { 'Accept': 'application/json', 'Content-Type': 'application/json' },
+			body: JSON.stringify({ type: type, list: list })
+		}
 
-		return fetch(url,fetchData)
+		return fetch(url, fetchData)
 	}
 
-	
+
 }
 

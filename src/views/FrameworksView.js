@@ -11,12 +11,12 @@ const useStyles = makeStyles(theme => ({
 	root: {
 		backgroundColor: '#fafafa'
 	},
-	loader:{
-	position: 'absolute',
-  left: '50%',
-  top: '50%',
-  marginLeft: '-37.5px',
-  marginTop: '-37.5px'
+	loader: {
+		position: 'absolute',
+		left: '50%',
+		top: '50%',
+		marginLeft: '-37.5px',
+		marginTop: '-37.5px'
 	}
 }))
 

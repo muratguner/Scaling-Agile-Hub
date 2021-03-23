@@ -143,8 +143,14 @@ const CardComponent = (props) => {
               variant="body1"
               component="p"
             >
-              {description.substring(0, 70) + "... "}{" "}
-              <text style={{ color: "gray" }}>more</text>
+              <CardContent>
+
+                <Typography className={imageLink ? classes.standardDescription : classes.standardDescriptionMissingImage} variant='body1' component='p'>
+                  {(description !== null ? description.substring(0, 50) + "... " : "")}{" "}
+                  <text style={{ color: "gray" }}>more</text>
+                </Typography>
+              </CardContent>
+
             </Typography>
           </CardContent>
         </Card>

@@ -500,13 +500,13 @@ const SinglePatternViewComponent = (props) => {
     }
   };
 
-  const downloadPaternCatalog = (param) => {
+  const downloadPaternCatalog = (type, list) => {
     setIsLoading(true);
-    ItemsService.downloadCatalog(param).then((response) => {
+    ItemsService.downloadCatalog(type, list).then((response) => {
       setTimeout(() => {
         window.location.href = "http://localhost:5000/api/v1/latex/download";
         setIsLoading(false);
-      }, 3000);
+      }, 10000);
     });
   };
 
@@ -544,13 +544,11 @@ const SinglePatternViewComponent = (props) => {
             var patternInfo = patternIdRegExp.exec(matchesArray[a]);
             var patternId = patternInfo[0].split("/");
             var stringToReplace = `${matchesArray[a]}`;
-            var replacement = `<a href="http://localhost:8000/#/patterns/${
-              patternInfo[1]
-            }/${
-              patternId[1]
-            }" style={{ text-decoration: "none" }}><div role="button" class="MuiChip-root MuiChip-colorPrimary MuiChip-clickableColorPrimary MuiChip-clickable" tabindex="0"><span class="MuiChip-label">${patternInfo[1]
-              .replace("%20", " ")
-              .slice(0, -1)} ${patternId[1]}</span></div></a>`;
+            var replacement = `<a href="http://localhost:8000/#/patterns/${patternInfo[1]
+              }/${patternId[1]
+              }" style={{ text-decoration: "none" }}><div role="button" class="MuiChip-root MuiChip-colorPrimary MuiChip-clickableColorPrimary MuiChip-clickable" tabindex="0"><span class="MuiChip-label">${patternInfo[1]
+                .replace("%20", " ")
+                .slice(0, -1)} ${patternId[1]}</span></div></a>`;
             htmlString = htmlString.replace(stringToReplace, replacement);
           } else {
             // Only one match
@@ -558,13 +556,11 @@ const SinglePatternViewComponent = (props) => {
             var patternInfo = patternIdRegExp.exec(matchesArray[a]);
             var patternId = patternInfo[0].split("/");
             var stringToReplace = `${matchesArray[a]}`;
-            var replacement = `<a href="http://localhost:8000/#/patterns/${
-              patternInfo[1]
-            }/${
-              patternId[1]
-            }" style={{ text-decoration: "none" }}><div role="button" class="MuiChip-root MuiChip-colorPrimary MuiChip-clickableColorPrimary MuiChip-clickable" tabindex="0"><span class="MuiChip-label">${patternInfo[1]
-              .replace("%20", " ")
-              .slice(0, -1)} ${patternId[1]}</span></div></a>`;
+            var replacement = `<a href="http://localhost:8000/#/patterns/${patternInfo[1]
+              }/${patternId[1]
+              }" style={{ text-decoration: "none" }}><div role="button" class="MuiChip-root MuiChip-colorPrimary MuiChip-clickableColorPrimary MuiChip-clickable" tabindex="0"><span class="MuiChip-label">${patternInfo[1]
+                .replace("%20", " ")
+                .slice(0, -1)} ${patternId[1]}</span></div></a>`;
             htmlString = htmlString.replace(stringToReplace, replacement);
           }
         }
@@ -572,13 +568,11 @@ const SinglePatternViewComponent = (props) => {
         var patternInfo = patternIdRegExp.exec(dataArray[0]);
         var patternId = patternInfo[0].split("/");
         var stringToReplace = `${dataArray[0]}`;
-        var replacement = `<a href="http://localhost:8000/#/patterns/${
-          patternInfo[1]
-        }/${
-          patternId[1]
-        }" style={{ text-decoration: "none }}><div role="button" class="MuiChip-root MuiChip-colorPrimary MuiChip-clickableColorPrimary MuiChip-clickable" tabindex="0"><span class="MuiChip-label">${patternInfo[1]
-          .replace("%20", " ")
-          .slice(0, -1)} ${patternId[1]}</span></div></a>`;
+        var replacement = `<a href="http://localhost:8000/#/patterns/${patternInfo[1]
+          }/${patternId[1]
+          }" style={{ text-decoration: "none }}><div role="button" class="MuiChip-root MuiChip-colorPrimary MuiChip-clickableColorPrimary MuiChip-clickable" tabindex="0"><span class="MuiChip-label">${patternInfo[1]
+            .replace("%20", " ")
+            .slice(0, -1)} ${patternId[1]}</span></div></a>`;
         htmlString = htmlString.replace(stringToReplace, replacement);
       }
     }
@@ -680,10 +674,10 @@ const SinglePatternViewComponent = (props) => {
                                   {ReactHtmlParser(
                                     renderChipsUsingRegex(
                                       attribute.content &&
-                                        attribute.content
-                                          .replace('["', "")
-                                          .replace('"]', "")
-                                          .replace("[]", "-")
+                                      attribute.content
+                                        .replace('["', "")
+                                        .replace('"]', "")
+                                        .replace("[]", "-")
                                     )
                                   )}
                                 </Typography>
@@ -837,10 +831,10 @@ const SinglePatternViewComponent = (props) => {
                             {ReactHtmlParser(
                               renderChipsUsingRegex(
                                 updateddata[key] &&
-                                  updateddata[key]
-                                    .replace('["', "")
-                                    .replace('"]', "")
-                                    .replace("[]", "-")
+                                updateddata[key]
+                                  .replace('["', "")
+                                  .replace('"]', "")
+                                  .replace("[]", "-")
                               )
                             )}
                           </Typography>
@@ -882,7 +876,7 @@ const SinglePatternViewComponent = (props) => {
         aria-label="add"
         className={classes.fabDownload}
         onClick={() => {
-          downloadPaternCatalog("3.0");
+          downloadPaternCatalog("individual", [data.identifier]);
         }}
       >
         <GetAppIcon className={classes.button} />
@@ -910,8 +904,8 @@ const SinglePatternViewComponent = (props) => {
       />
       {showToast
         ? React.createElement(CustomSnackBar, {
-            message: "Updated Successfully!",
-          })
+          message: "Updated Successfully!",
+        })
         : null}
     </div>
   );
