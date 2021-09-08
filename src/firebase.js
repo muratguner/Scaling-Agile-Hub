@@ -2,14 +2,14 @@ import firebase from "firebase";
 import "firebase/analytics";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyCW7Ktq7P2jwWy4KDZVLIWu3CwZW6ermYw",
+  apiKey: process.env.FIREBASE_API_KEY,
   authDomain: "scaling-agile-hub.firebaseapp.com",
-  databaseURL: "https://scaling-agile-hub.firebaseio.com",
-  projectId: "scaling-agile-hub",
-  storageBucket: "scaling-agile-hub.appspot.com",
-  messagingSenderId: "210803525808",
-  appId: "1:210803525808:web:41ad643ab7a312f0069375",
-  measurementId: "G-07FGRX8VZJ",
+  databaseURL: process.env.FIREBASE_DATABASE_URL,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  storageBucket: process.env.FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.FIREBASE_APP_ID,
+  measurementId: process.env.FIREBASE_MEASUREMENT_ID,
 };
 
 // Check that `window` is in scope for the analytics module!
