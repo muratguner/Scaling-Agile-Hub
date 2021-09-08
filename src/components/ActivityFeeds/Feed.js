@@ -102,7 +102,6 @@ function Feed(props) {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const [userData, setUserData] = React.useState("");
 
-
   const getImage = async function getImage(id) {
     return new Promise((resolve, reject) => {
       const picData = ItemsService.getPictures(id);
@@ -188,22 +187,24 @@ function Feed(props) {
       }
     }
     loadDataAsync();
-  }, [loading]);
+  }, []);
 
   const setImage = async function setImage(array, id) {
     setComments(
-      (commentsGlobal = commentsGlobal.map((item) =>
-        item.profilePicture === " " && item.userid === id
-          ? {
-              ...item,
-              profilePicture:
-                array[array.findIndex((obj) => obj.userid == item.userid)]
-                  .image,
-            }
-          : item
-      ) .sort(function (a, b) {
-        return b.timestamp - a.timestamp;
-      }))
+      (commentsGlobal = commentsGlobal
+        .map((item) =>
+          item.profilePicture === " " && item.userid === id
+            ? {
+                ...item,
+                profilePicture:
+                  array[array.findIndex((obj) => obj.userid == item.userid)]
+                    .image,
+              }
+            : item
+        )
+        .sort(function (a, b) {
+          return b.timestamp - a.timestamp;
+        }))
     );
   };
 
@@ -275,7 +276,7 @@ function Feed(props) {
                     avatar={
                       <Avatar
                         onClick={() => handleDialogOpen(value)}
-                        style={{cursor: "pointer"}}
+                        style={{ cursor: "pointer" }}
                         aria-label="recipe"
                         className={classes.avatar}
                         src={value.profilePicture}

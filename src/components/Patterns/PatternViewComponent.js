@@ -1,4 +1,5 @@
 import React from "react";
+import ItemService from "../../services/ItemsService";
 import { Helmet } from "react-helmet";
 import Button from "@material-ui/core/Button";
 import Snackbar from "@material-ui/core/Snackbar";
@@ -15,13 +16,29 @@ import makeStyles from "@material-ui/core/styles/makeStyles";
 import FilterIcon from "@material-ui/icons/FilterListRounded";
 import RotateIcon from "@material-ui/icons/ScreenRotationRounded";
 import AddIcon from "@material-ui/icons/Add";
+import GetAppIcon from '@material-ui/icons/GetApp';
 import Fab from "@material-ui/core/Fab";
 import PatternVisualization from "./includes/PatternVisualization";
 import Header from "../Header";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import firebase from "firebase";
+import "firebase/analytics";
 // import HeaderSearchField from '../HeaderSearchField'
 import SinglePatternViewComponent from "./includes/SinglePatternViewComponent";
 import ItemsService from "../../services/ItemsService";
 import CreatePatternsListDialog from "./includes/CreatePatternsListDialog";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCW7Ktq7P2jwWy4KDZVLIWu3CwZW6ermYw",
+  authDomain: "scaling-agile-hub.firebaseapp.com",
+  databaseURL: "https://scaling-agile-hub.firebaseio.com",
+  projectId: "scaling-agile-hub",
+  storageBucket: "scaling-agile-hub.appspot.com",
+  messagingSenderId: "210803525808",
+  appId: "1:210803525808:web:41ad643ab7a312f0069375",
+  measurementId: "G-07FGRX8VZJ",
+};
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -74,6 +91,11 @@ const useStyles = makeStyles((theme) => ({
     bottom: theme.spacing(4),
     right: theme.spacing(5),
   },
+  fabDownload: {
+    position: "fixed",
+    bottom: theme.spacing(4),
+    left: theme.spacing(5),
+  },
   stakeholderChips: {
     margin: theme.spacing(3),
     height: "40px",
@@ -91,6 +113,7 @@ const useStyles = makeStyles((theme) => ({
   viewGraphButton: {
     alignSelf: "flex-end",
   },
+
 }));
 
 const PatternViewComponent = (props) => {
@@ -147,6 +170,7 @@ const PatternViewComponent = (props) => {
   const [selectedStakeholders, setSelectedStakeholders] = React.useState(
     Array(stakeholderInfo.length).fill(null)
   );
+  const [isLoading, setIsLoading] = React.useState(false);
 
   const handleCreatePatternListDialogOpen = () => {
     setCreatePatternListDialogOpen(true);
@@ -175,16 +199,16 @@ const PatternViewComponent = (props) => {
         level.map((entity) => {
           return entity.description === "Concerns"
             ? {
-                ...entity,
-                data: entity.data.filter(
-                  (item) =>
-                    item.coordinationPatterns.length +
-                      item.principles.length +
-                      item.methodologyPatterns.length +
-                      item.visualizationPatterns.length !==
-                    0
-                ),
-              }
+              ...entity,
+              data: entity.data.filter(
+                (item) =>
+                  item.coordinationPatterns.length +
+                  item.principles.length +
+                  item.methodologyPatterns.length +
+                  item.visualizationPatterns.length !==
+                  0
+              ),
+            }
             : entity;
         })
       );
@@ -202,14 +226,14 @@ const PatternViewComponent = (props) => {
         return entity.data !== 0 &&
           Object.keys(entity.data[0]).includes("concerns")
           ? {
-              ...entity,
-              data: entity.data.map((item) => ({
-                ...item,
-                concerns: item.concerns.filter((concern) =>
-                  concerns.includes(concern.identifier)
-                ),
-              })),
-            }
+            ...entity,
+            data: entity.data.map((item) => ({
+              ...item,
+              concerns: item.concerns.filter((concern) =>
+                concerns.includes(concern.identifier)
+              ),
+            })),
+          }
           : entity;
       })
     );
@@ -241,11 +265,11 @@ const PatternViewComponent = (props) => {
           entityName: entity.description,
           categories: Object.keys(entity.data[0]).includes("category")
             ? [...new Set(entity.data.map((item) => item.category))].map(
-                (key) => ({
-                  categoryName: key,
-                  data: entity.data.filter((item) => item.category === key),
-                })
-              )
+              (key) => ({
+                categoryName: key,
+                data: entity.data.filter((item) => item.category === key),
+              })
+            )
             : [{ categoryName: "all", data: entity.data }],
         };
       });
@@ -382,7 +406,7 @@ const PatternViewComponent = (props) => {
                   if (
                     category.rows > 1 &&
                     Math.floor(nodeIndex / category.columns) ===
-                      category.rows - 1
+                    category.rows - 1
                   ) {
                     nodeStartX =
                       (((category.columns -
@@ -517,8 +541,8 @@ const PatternViewComponent = (props) => {
         .length > 1
         ? history.location.pathname.split("/")[3]
         : selected
-        ? selected.identifier
-        : undefined;
+          ? selected.identifier
+          : undefined;
     if (multipleStakeholdersBeingRendered) {
       if (selectedItem) {
         return {
@@ -546,11 +570,11 @@ const PatternViewComponent = (props) => {
               entity.description === "Anti Patterns"
                 ? entity
                 : {
-                    ...entity,
-                    data: entity.data.filter((item) =>
-                      getAllLinkPaths().slice(1).includes(item.identifier)
-                    ),
-                  }
+                  ...entity,
+                  data: entity.data.filter((item) =>
+                    getAllLinkPaths().slice(1).includes(item.identifier)
+                  ),
+                }
             )
           )
         ),
@@ -590,14 +614,14 @@ const PatternViewComponent = (props) => {
               entity.description === "Anti Patterns"
                 ? entity
                 : {
-                    ...entity,
-                    data: entity.data.filter((item) =>
-                      getPath(links, "from", selectedItem)
-                        .concat(getPath(links, "to", selectedItem))
-                        .slice(1)
-                        .includes(item.identifier)
-                    ),
-                  }
+                  ...entity,
+                  data: entity.data.filter((item) =>
+                    getPath(links, "from", selectedItem)
+                      .concat(getPath(links, "to", selectedItem))
+                      .slice(1)
+                      .includes(item.identifier)
+                  ),
+                }
             )
           )
         ),
@@ -787,6 +811,18 @@ const PatternViewComponent = (props) => {
   const handleSelectedChips = () => {
     setMultipleStakeholdersBeingRendered(true);
     setInitialStateOnPageLoad(false);
+
+  };
+
+  const downloadFullPaternCatalog = (type, list) => {
+    setIsLoading(true);
+    console.log("selected stakeholder:" + list)
+    ItemService.downloadCatalog(type, list).then((response) => {
+      setTimeout(() => {
+        window.location.href = 'http://localhost:5000/api/v1/latex/download';
+        setIsLoading(false)
+      }, 3000);
+    })
   };
 
   if (
@@ -843,7 +879,7 @@ const PatternViewComponent = (props) => {
       </Helmet>
       <Header
         history={history}
-        // additionalToolbarLeft={<HeaderSearchField handleOnChange={handleSearchChange} placeholder='Search patterns ...' />
+      // additionalToolbarLeft={<HeaderSearchField handleOnChange={handleSearchChange} placeholder='Search patterns ...' />
       />
 
       {isPortraitMode ? (
@@ -900,12 +936,12 @@ const PatternViewComponent = (props) => {
                 .concat()
                 .sort((a, b) =>
                   parseInt(a.identifier.split("-")[1]) >
-                  parseInt(b.identifier.split("-")[1])
+                    parseInt(b.identifier.split("-")[1])
                     ? 1
                     : parseInt(b.identifier.split("-")[1]) >
                       parseInt(a.identifier.split("-")[1])
-                    ? -1
-                    : 0
+                      ? -1
+                      : 0
                 )
                 .map((item, index) => (
                   <MenuItem
@@ -959,7 +995,7 @@ const PatternViewComponent = (props) => {
           )}
           {}
           {initialStateOnPageLoad &&
-          stakeholderVisibility.filter((value) => value === true).length > 0 ? (
+            stakeholderVisibility.filter((value) => value === true).length > 0 ? (
             <div className={classes.selectedStakeholders}>
               <div className={classes.viewGraphButton}>
                 <Button
@@ -972,6 +1008,47 @@ const PatternViewComponent = (props) => {
               </div>
             </div>
           ) : null}
+          <Fab
+            variant="extended"
+            color="primary"
+            aria-label="add"
+            className={classes.fabDownload}
+            onClick={() => {
+              if (firebase.apps.length) {
+                firebase.app(); // if already initialized, use that one
+              }
+
+              // To enable analytics. https://firebase.google.com/docs/analytics/get-started
+              if ("measurementId" in firebaseConfig) {
+                firebase.analytics();
+                firebase.analytics().logEvent("full_catalog");
+                console.log("logged");
+              }
+              if (multipleStakeholdersBeingRendered) {
+                var array = []
+                selectedStakeholders.map((item, index) => {
+                  if (item !== null) {
+                    array.push(item.identifier)
+                  }
+                });
+
+
+                downloadFullPaternCatalog("stakeholder", array)
+              } else if (!multipleStakeholdersBeingRendered) {
+                downloadFullPaternCatalog("full")
+
+              }
+
+            }}
+          >
+            <GetAppIcon className={classes.button} />
+            {multipleStakeholdersBeingRendered && <div>Download Stakeholder Catalog</div>}
+            {!multipleStakeholdersBeingRendered && <div>Download Full Catalog</div>}
+            {isLoading && <div style={{ textAlign: "center", paddingLeft: "8px", paddingTop: "6px" }}>
+              <CircularProgress size={18} thickness={3} color="white" />
+            </div>}
+          </Fab>
+
           {ItemsService.isLoggedIn() && ItemsService.isAdminAndVerified() ? (
             <Fab
               variant="extended"

@@ -119,6 +119,7 @@ const SignDialog = props => {
 						handleClose()
 						setTimeout(() => {
 							setSuccess(false)
+							window.location.reload();
 							setInputErrorMessage('')
 						}, 1000)
 					}, 800)

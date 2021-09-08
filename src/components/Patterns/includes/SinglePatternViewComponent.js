@@ -21,9 +21,11 @@ import {
 } from "@material-ui/core";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 import Fab from "@material-ui/core/Fab";
+import GetAppIcon from "@material-ui/icons/GetApp";
 import makeStyles from "@material-ui/core/styles/makeStyles";
 import EditIcon from "@material-ui/icons/Edit";
 import CustomSnackBar from "../../CustomSnackBar";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import { GET_ENTITY_COLOR } from "../../../config";
 import PatternVisualization from "./PatternVisualization";
 import CreateOrEditPatternDialog from "./CreateOrEditPatternDialog";
@@ -138,6 +140,11 @@ const useStyles = makeStyles((theme) => {
       textAlign: "center",
       marginRight: theme.spacing(1),
     },
+    fabDownload: {
+      position: "fixed",
+      bottom: theme.spacing(4),
+      left: theme.spacing(5),
+    },
   };
 });
 
@@ -169,6 +176,7 @@ const SinglePatternViewComponent = (props) => {
   const classes = useStyles();
   const [clapData, setClapData] = React.useState([]);
   const [clapCount, setClapCount] = React.useState(0);
+  const [isLoading, setIsLoading] = React.useState(false);
 
   var updateddata = [];
 
@@ -492,6 +500,16 @@ const SinglePatternViewComponent = (props) => {
     }
   };
 
+  const downloadPaternCatalog = (type, list) => {
+    setIsLoading(true);
+    ItemsService.downloadCatalog(type, list).then((response) => {
+      setTimeout(() => {
+        window.location.href = "http://localhost:5000/api/v1/latex/download";
+        setIsLoading(false);
+      }, 10000);
+    });
+  };
+
   React.useEffect(() => {
     setTimeout(() => {
       if (localStorage.getItem("authentication")) {
@@ -526,13 +544,11 @@ const SinglePatternViewComponent = (props) => {
             var patternInfo = patternIdRegExp.exec(matchesArray[a]);
             var patternId = patternInfo[0].split("/");
             var stringToReplace = `${matchesArray[a]}`;
-            var replacement = `<a href="http://localhost:8000/#/patterns/${
-              patternInfo[1]
-            }/${
-              patternId[1]
-            }" style={{ text-decoration: "none" }}><div role="button" class="MuiChip-root MuiChip-colorPrimary MuiChip-clickableColorPrimary MuiChip-clickable" tabindex="0"><span class="MuiChip-label">${patternInfo[1]
-              .replace("%20", " ")
-              .slice(0, -1)} ${patternId[1]}</span></div></a>`;
+            var replacement = `<a href="http://localhost:8000/#/patterns/${patternInfo[1]
+              }/${patternId[1]
+              }" style={{ text-decoration: "none" }}><div role="button" class="MuiChip-root MuiChip-colorPrimary MuiChip-clickableColorPrimary MuiChip-clickable" tabindex="0"><span class="MuiChip-label">${patternInfo[1]
+                .replace("%20", " ")
+                .slice(0, -1)} ${patternId[1]}</span></div></a>`;
             htmlString = htmlString.replace(stringToReplace, replacement);
           } else {
             // Only one match
@@ -540,13 +556,11 @@ const SinglePatternViewComponent = (props) => {
             var patternInfo = patternIdRegExp.exec(matchesArray[a]);
             var patternId = patternInfo[0].split("/");
             var stringToReplace = `${matchesArray[a]}`;
-            var replacement = `<a href="http://localhost:8000/#/patterns/${
-              patternInfo[1]
-            }/${
-              patternId[1]
-            }" style={{ text-decoration: "none" }}><div role="button" class="MuiChip-root MuiChip-colorPrimary MuiChip-clickableColorPrimary MuiChip-clickable" tabindex="0"><span class="MuiChip-label">${patternInfo[1]
-              .replace("%20", " ")
-              .slice(0, -1)} ${patternId[1]}</span></div></a>`;
+            var replacement = `<a href="http://localhost:8000/#/patterns/${patternInfo[1]
+              }/${patternId[1]
+              }" style={{ text-decoration: "none" }}><div role="button" class="MuiChip-root MuiChip-colorPrimary MuiChip-clickableColorPrimary MuiChip-clickable" tabindex="0"><span class="MuiChip-label">${patternInfo[1]
+                .replace("%20", " ")
+                .slice(0, -1)} ${patternId[1]}</span></div></a>`;
             htmlString = htmlString.replace(stringToReplace, replacement);
           }
         }
@@ -554,13 +568,11 @@ const SinglePatternViewComponent = (props) => {
         var patternInfo = patternIdRegExp.exec(dataArray[0]);
         var patternId = patternInfo[0].split("/");
         var stringToReplace = `${dataArray[0]}`;
-        var replacement = `<a href="http://localhost:8000/#/patterns/${
-          patternInfo[1]
-        }/${
-          patternId[1]
-        }" style={{ text-decoration: "none }}><div role="button" class="MuiChip-root MuiChip-colorPrimary MuiChip-clickableColorPrimary MuiChip-clickable" tabindex="0"><span class="MuiChip-label">${patternInfo[1]
-          .replace("%20", " ")
-          .slice(0, -1)} ${patternId[1]}</span></div></a>`;
+        var replacement = `<a href="http://localhost:8000/#/patterns/${patternInfo[1]
+          }/${patternId[1]
+          }" style={{ text-decoration: "none }}><div role="button" class="MuiChip-root MuiChip-colorPrimary MuiChip-clickableColorPrimary MuiChip-clickable" tabindex="0"><span class="MuiChip-label">${patternInfo[1]
+            .replace("%20", " ")
+            .slice(0, -1)} ${patternId[1]}</span></div></a>`;
         htmlString = htmlString.replace(stringToReplace, replacement);
       }
     }
@@ -662,10 +674,10 @@ const SinglePatternViewComponent = (props) => {
                                   {ReactHtmlParser(
                                     renderChipsUsingRegex(
                                       attribute.content &&
-                                        attribute.content
-                                          .replace('["', "")
-                                          .replace('"]', "")
-                                          .replace("[]", "-")
+                                      attribute.content
+                                        .replace('["', "")
+                                        .replace('"]', "")
+                                        .replace("[]", "-")
                                     )
                                   )}
                                 </Typography>
@@ -819,10 +831,10 @@ const SinglePatternViewComponent = (props) => {
                             {ReactHtmlParser(
                               renderChipsUsingRegex(
                                 updateddata[key] &&
-                                  updateddata[key]
-                                    .replace('["', "")
-                                    .replace('"]', "")
-                                    .replace("[]", "-")
+                                updateddata[key]
+                                  .replace('["', "")
+                                  .replace('"]', "")
+                                  .replace("[]", "-")
                               )
                             )}
                           </Typography>
@@ -858,6 +870,30 @@ const SinglePatternViewComponent = (props) => {
         </Fab>
       ) : null}
 
+      <Fab
+        variant="extended"
+        color="primary"
+        aria-label="add"
+        className={classes.fabDownload}
+        onClick={() => {
+          downloadPaternCatalog("individual", [data.identifier]);
+        }}
+      >
+        <GetAppIcon className={classes.button} />
+        Download Pattern Catalog
+        {isLoading && (
+          <div
+            style={{
+              textAlign: "center",
+              paddingLeft: "8px",
+              paddingTop: "6px",
+            }}
+          >
+            <CircularProgress size={18} thickness={3} color="white" />
+          </div>
+        )}
+      </Fab>
+
       <CreateOrEditPatternDialog
         open={isEditPatternDialogOpen}
         handleClose={handleEditPatternDialogClose}
@@ -868,8 +904,8 @@ const SinglePatternViewComponent = (props) => {
       />
       {showToast
         ? React.createElement(CustomSnackBar, {
-            message: "Updated Successfully!",
-          })
+          message: "Updated Successfully!",
+        })
         : null}
     </div>
   );
